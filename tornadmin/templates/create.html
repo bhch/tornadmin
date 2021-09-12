@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% autoescape None %}
+
+{% block content %}
+
+<style>
+    label {
+        width: 130px;
+        display: inline-block;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+</style>
+
+{% module Template(
+        'modules/header.html',
+        admin=admin,
+        heading='%s / %s' % (admin.name, 'Edit' if obj else 'Add new'),
+        back_button=True,
+        add_button=True,
+        absolute_url=obj.get_absolute_url() if hasattr(obj, 'get_absolute_url') else None
+    ) 
+%}
+
+<div class="content">
+    <form method="POST">
+        <div class="row">
+            <div class="col-12 col-md-8 col-lg-6">
+                {% for field in form %}
+                <div class="form-group">
+                    {% if field.type in ['BooleanField', 'RadioField'] %}
+                        <div class="form-check">
+                            {{ field(class_='form-check-input') }}
+                            {{ field.label(class_='form-check-label') }}
+                        </div>
+                    {% else %}
+                        {{ field.label }}
+                        {{ field(class_='form-control') }}
+                    {% end %}
+
+                    {% if field.errors %}
+                        <div class="form-text error">{{ field.errors[0] }}</div>
+                    {% end %}
+                </div>
+                {% end %}
+            </div>
+            <div class="col-12 form-footer">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="reset" class="btn btn-secondary">Cancel</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+{% end %}

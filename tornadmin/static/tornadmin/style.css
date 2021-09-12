@@ -1,0 +1,225 @@
+/*
+Colors
+======
+
+$text-color: #323130;
+
+$color-primary-shade-30: #004a41;
+$color-primary-shade-20: #006256;
+$color-primary-shade-10: #0a766c;
+$color-primary: #008374;
+$color-primary-tint-10: #1e958a;
+$color-primary-tint-20: #c9f2ed;
+$color-primary-tint-30: #dff8f6;
+$color-primary-tint-40: #f0fbfa;
+
+$color-accent-shade-10: #d7213c;
+$color-accent: #ea2643;
+$color-accent-tint-10: #ff3855;
+
+$color-black: #000000;
+$color-gray-190: #201f1e;
+$color-gray-160: #323130;
+$color-gray-150: #3b3a39;
+$color-gray-130: #605e5c;
+$color-gray-120: #797775;
+$color-gray-90: #a19f9d;
+$color-gray-60: #c8c6c4;
+$color-gray-50: #d2d0ce;
+$color-gray-40: #e1dfdd;
+$color-gray-30: #edebe9;
+$color-gray-20: #f3f2f1;
+$color-gray-10: #faf9f8;
+$color-white: #ffffff;
+
+$color-error-dark : #d83b01;
+$color-error-light : #f55215;
+$color-success-dark : #107c10;
+$color-success-light : #3cb43c;
+
+*/
+
+body {
+    padding-top: 90px;
+    color: #323130;
+    background-color: #f8fafa;
+}
+
+a {
+    color: #008374;
+}
+a:hover {
+    color: #006256;
+}
+
+.btn-primary {
+    background-color: #008374;
+    border: 1px solid #008374;
+    color: #fff;
+}
+.btn-primary:hover {
+    background-color: #0a766c;
+    border-color: #0a766c;
+    color: #fff;
+}
+.btn-primary:focus {
+    background-color: #006256;
+    border-color: #004a41;
+}
+.btn-primary:disabled {
+    background-color: #dff8f6;
+    border: 1px solid #dff8f6;
+    color: #1e958a;
+}
+.btn-outline-primary {
+    background-color: #fff;
+    border: 1px solid #008374;
+    color: #008374;
+}
+.btn-outline-primary:hover {
+    background-color: #0a766c;
+    border-color: #0a766c;
+    color: #fff;
+}
+.btn-accent {
+    background-color: #ea2643;
+    border: 1px solid #ea2643;
+    color: #fff;
+}
+.btn-accent:hover {
+    background-color: #d7213c;
+    border-color: #d7213c;
+    color: #fff;
+}
+
+.table-hover tbody tr:hover {
+    color: #212529;
+    background-color: #faf9f8;
+}
+
+.navbar {
+    background-color: #fff !important;
+}
+.navbar.fixed-top {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.075);
+}
+.side-nav {
+    background: #f3f2f1;
+    position: fixed;
+    min-height: 0;
+    bottom: 0;
+    top: 0;
+    padding-top: 4.4rem;
+    left: -101%;
+    overflow-y: auto;
+    z-index: 1000;
+}
+.side-nav,
+.side-nav.open {
+    transition: all 0.2s ease-in-out;
+}
+.side-nav.open {
+    left: 0;
+}
+@media (min-width: 576px) {
+    .side-nav {
+        left: 0;
+        border-right: 1px solid #e1dfdd;
+    }
+}
+.side-nav li {
+    list-style: none;
+}
+.side-nav li .dropdown-menu {
+    border-radius: 0;
+    border-bottom: 1rem solid transparent;
+}
+.side-nav li .btn,
+.side-nav li a {
+    text-decoration: none;
+    display: block;
+    padding: 10px 15px;
+    color: #008374;
+    transition: background-color 0.2s ease-in-out;
+    outline: none;
+    background-color: transparent;
+    border: none;
+    margin: 0;
+    border-radius: 0;
+    width: 100%;
+    text-align: left;
+}
+.side-nav li .btn:hover,
+.side-nav li a:hover {
+    background-color: #edebe9;
+}
+.side-nav li .btn:focus,
+.side-nav li a:focus {
+    background-color: #f0fbfa;
+}
+.side-nav li a.active {
+    color: #0a766c;
+    background-color: #e1dfdd;
+}
+.side-nav li a.active:hover {
+    background-color: #d2d0ce;
+}
+.side-nav li a.active:focus {
+    box-shadow: 0 0 0 0.2rem rgba(130, 168, 164, 0.5);
+}
+.side-nav li a svg {
+    vertical-align: middle;
+    margin-left: 4px;
+    margin-right: 12px;
+}
+.side-nav li .menu-header {
+    font-size: 0.8rem;
+    color: #797775;
+    padding-left: 15px;
+    padding-bottom: 6px;
+    display: block;
+    margin-top: 30px;
+}
+@media (max-width: 575px) {
+    .side-nav {
+        padding-top: 4rem;
+    }
+    .side-nav li .btn,
+    .side-nav li a {
+        padding: 8px 15px;
+    }
+}
+.content {
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    display: table;
+    width: 100%;
+    box-shadow: 0 0 4px rgba(0,0,0,0.1);
+    margin-bottom: 100px;
+}
+.content.table-content {
+    padding: 0;
+}
+.header {
+    margin-bottom: 25px
+}
+.page-heading {
+    font-size: 1.4rem;
+    font-weight: normal;
+    margin-top: 4px;
+}
+.header .btn {
+    border-radius: 3px;
+    padding: 4px 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    font-size: 0.95rem;
+}
+
+.form-footer {
+    border-top: 1px solid #e1dfdd;
+    padding-top: 30px;
+    padding-bottom: 15px;
+    margin-top: 15px;
+}
+
