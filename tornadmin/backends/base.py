@@ -22,3 +22,6 @@ class BaseModelAdmin:
 
     async def save_model(self, request_handler, form, obj=None):
         raise NotImplementedError('Implement in subclass')
+
+    def get_absolute_url(self, request_handler, obj):
+        return None
