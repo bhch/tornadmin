@@ -103,6 +103,13 @@ a:hover {
 .navbar.fixed-top {
     box-shadow: 0 2px 4px rgba(0,0,0,0.075);
 }
+.navbar-brand {
+    padding: 0;
+}
+.navbar-brand img {
+    height: 36px;
+}
+
 .side-nav {
     background: #f3f2f1;
     position: fixed;
