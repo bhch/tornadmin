@@ -1,6 +1,5 @@
 import os
 from tornado import web
-from tornadmin.sites import site
 from tornadmin.utils import get_value
 
 
@@ -20,8 +19,10 @@ class AdminUser:
 
 
 class BaseHandler(web.RequestHandler):
+    admin_site = None
+
     async def prepare(self):
-        self.current_user = AdminUser(**site.config['authenticate'](self.request))
+        self.current_user = AdminUser(**self.admin_site.authenticate(self.request))
 
         if not self.current_user and getattr(self, 'login_required', True):
             return self.redirect(self.reverse_url('admin:login'))
@@ -54,7 +55,7 @@ class BaseHandler(web.RequestHandler):
         namespace = super().get_template_namespace()
         namespace.update({
             'get_value': get_value,
-            'admin_site': site
+            'admin_site': self.admin_site
         })
         return namespace
 
@@ -76,9 +77,9 @@ class BaseHandler(web.RequestHandler):
                 include_host = getattr(self, "include_host", False)
 
             if include_host:
-                base = self.request.protocol + "://" + self.request.host + self.base_url
+                base = self.request.protocol + "://" + self.request.host + self.admin_site.base_url
             else:
-                base = self.base_url
+                base = self.admin_site.base_url
 
             fake_settings = {
                 'static_path': os.path.join(BASE_DIR, 'static'),
@@ -92,7 +93,7 @@ class BaseHandler(web.RequestHandler):
     def _static_url(self, path, *args, **kwargs):
         url = super().static_url(path, *args, **kwargs)
         if path.startswith('tornadmin'):
-            url = self.base_url + url
+            url = self.admin_site.base_url + url
         return url
 
 
@@ -118,7 +119,7 @@ class IndexHandler(BaseHandler):
     def get(self):
         registry = []
 
-        _registry = site.get_registry()
+        _registry = self.admin_site.get_registry()
 
         for key, admin in _registry.items():
             registry.append(admin)
@@ -131,7 +132,7 @@ class IndexHandler(BaseHandler):
 
 class ListHandler(BaseHandler):
     async def get(self, app_slug, model_slug):
-        admin = site.get_registered(app_slug, model_slug)
+        admin = self.admin_site.get_registered(app_slug, model_slug)
 
         context = {
             'admin': admin,
@@ -144,7 +145,7 @@ class ListHandler(BaseHandler):
 
 class CreateHandler(BaseHandler):
     def get(self, app_slug, model_slug):
-        admin = site.get_registered(app_slug, model_slug)
+        admin = self.admin_site.get_registered(app_slug, model_slug)
         form_class = admin.get_form(self)
         context = {
             'obj': None,
@@ -154,7 +155,7 @@ class CreateHandler(BaseHandler):
         self.render('create.html', **context)
 
     async def post(self, app_slug, model_slug,):
-        admin = site.get_registered(app_slug, model_slug)
+        admin = self.admin_site.get_registered(app_slug, model_slug)
         form_class = admin.get_form(self)
         
         data = {}
@@ -183,7 +184,7 @@ class CreateHandler(BaseHandler):
 
 class DetailHandler(BaseHandler):
     async def get(self, app_slug, model_slug, id):
-        admin = site.get_registered(app_slug, model_slug)
+        admin = self.admin_site.get_registered(app_slug, model_slug)
         form_class = admin.get_form(self)
         obj = await admin.get_object(self, id)
         data = await admin.get_form_data(obj)
@@ -199,7 +200,7 @@ class DetailHandler(BaseHandler):
         self.render('create.html', **context)
 
     async def post(self, app_slug, model_slug, id):
-        admin = site.get_registered(app_slug, model_slug)
+        admin = self.admin_site.get_registered(app_slug, model_slug)
         form_class = admin.get_form(self)
         obj = await admin.get_object(self, id)
 

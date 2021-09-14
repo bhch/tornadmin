@@ -37,10 +37,10 @@ class EndMatchesFactory:
         return PathMatches(path)
 
 
-def AdminRouter(base_url):
-    handlers.BaseHandler.base_url = base_url
+def AdminRouter(admin_site):
+    handlers.BaseHandler.admin_site = admin_site
 
-    EndMatches = EndMatchesFactory(base_url)
+    EndMatches = EndMatchesFactory(admin_site.base_url)
 
     routes = [
         (r'login/?', handlers.LoginHandler, 'login'),
@@ -53,7 +53,7 @@ def AdminRouter(base_url):
     ]
 
     return (
-        StartMatches(r'%s' % base_url),
+        StartMatches(r'%s' % admin_site.base_url),
         [
             Rule(EndMatches(route[0]),
             route[1],

@@ -10,12 +10,14 @@ class AdminSite:
         login
         logout
     """
-    def __init__(self):
-        self.config = {}
-        self._registry = {}
+    def __init__(self, base_url, **kwargs):
+        self.base_url = base_url
+        self.site_name = kwargs.get('site_name', 'Tornadmin')
+        self.authenticate = kwargs.get('authenticate')
+        self.login = kwargs.get('login')
+        self.logout = kwargs.get('logout')
 
-    def configure(self, config):
-        self.config.update(config)
+        self._registry = {}
 
     @classmethod
     def get_registry_key(cls, model_admin):
@@ -36,6 +38,3 @@ class AdminSite:
     def get_registered(self, app_slug, model_slug):
         key = '.'.join([app_slug, model_slug]).strip('.')
         return self._registry.get(key, (None, None))
-
-
-site = AdminSite()
