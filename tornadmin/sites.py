@@ -1,15 +1,8 @@
 import copy
 
-# site.register(UserAdmin(model=User))
 
 class AdminSite:
-    """The class responsible for generating the admin site.
-
-    Configuration:
-        authenticate
-        login
-        logout
-    """
+    """The class is responsible for generating the admin site."""
     def __init__(self, base_url, **kwargs):
         self.base_url = base_url
         self.site_name = kwargs.get('site_name', 'Tornadmin')
