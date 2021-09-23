@@ -46,8 +46,11 @@
                 {% end %}
             </div>
             <div class="col-12 form-footer">
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="reset" class="btn btn-secondary">Cancel</button>
+                <input type="submit" class="btn btn-primary mr-0 mr-sm-1" name="_save" value="Save">
+                <input type="submit" class="btn btn-outline-primary" name="_addanother" value="Save and add another">
+                {% if obj %}
+                <button type="button" class="btn btn-outline-danger float-none float-sm-right">Delete</button>
+                {% end %}
             </div>
         </div>
     </form>

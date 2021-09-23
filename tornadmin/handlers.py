@@ -222,7 +222,10 @@ class DetailHandler(BaseHandler):
 
         if form.validate():
             await admin.save_model(self, form, obj)
-            self.redirect('admin:detail', app_slug, model_slug, obj.id)
+            if self.get_body_argument('_addanother', False):
+                self.redirect('admin:create', app_slug, model_slug)
+            else:
+                self.redirect('admin:detail', app_slug, model_slug, obj.id)
             return
 
         context = {

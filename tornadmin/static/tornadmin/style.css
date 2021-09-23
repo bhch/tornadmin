@@ -229,4 +229,10 @@ a:hover {
     padding-bottom: 15px;
     margin-top: 15px;
 }
-
+@media (max-width: 575px) {
+    .form-footer .btn {
+        width: 100%;
+        display: block;
+        margin-bottom: 1rem;
+    }
+}
