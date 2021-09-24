@@ -49,6 +49,7 @@ def AdminRouter(admin_site):
         (r'(?P<app_slug>[\w-]+)/(?P<model_slug>[\w-]+)/?', handlers.ListHandler, 'list'),
         (r'(?P<app_slug>[\w-]+)/(?P<model_slug>[\w-]+)/add/?', handlers.CreateHandler, 'create'),
         (r'(?P<app_slug>[\w-]+)/(?P<model_slug>[\w-]+)/(?P<id>[\w-]+)/?', handlers.DetailHandler, 'detail'),
+        (r'(?P<app_slug>[\w-]+)/(?P<model_slug>[\w-]+)/(?P<id>[\w-]+)/delete/?', handlers.DeleteHandler, 'delete'),
         (r'static/(.*)', handlers.StaticFileHandler, 'static'),
     ]
 

@@ -235,3 +235,15 @@ class DetailHandler(BaseHandler):
         }
 
         self.render('create.html', **context)
+
+
+class DeleteHandler(BaseHandler):
+    async def post(self, app_slug, model_slug, id):
+        admin = self.admin_site.get_registered(app_slug, model_slug)
+        form_class = admin.get_form(self)
+        obj = await admin.get_object(self, id)
+
+        # :TODO: check if user has delete permission
+        await obj.delete()
+
+        self.redirect('admin:list', app_slug, model_slug)
