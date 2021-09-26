@@ -22,13 +22,11 @@ class BaseHandler(web.RequestHandler):
     admin_site = None
 
     async def prepare(self):
-        if getattr(self.admin_site, 'authenticate', None):
-            self.current_user = AdminUser(**self.admin_site.authenticate(self.request))
-        else:
-            # If authenticate function is not provided,
-            # we make the site accessible by default.
-            # This is useful for quickstarting
-            self.current_user = AdminUser(username='tornadmin_user')
+        auth_data = self.admin_site.authenticate(self.request)
+        if not auth_data:
+            auth_data = {'username': None}
+
+        self.current_user = AdminUser(**auth_data)
 
         if not self.current_user and getattr(self, 'login_required', True):
             return self.redirect(self.reverse_url('admin:login'))

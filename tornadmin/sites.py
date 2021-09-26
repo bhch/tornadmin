@@ -6,11 +6,34 @@ class AdminSite:
     def __init__(self, base_url, **kwargs):
         self.base_url = base_url
         self.site_name = kwargs.get('site_name', 'Tornadmin')
-        self.authenticate = kwargs.get('authenticate')
-        self.login = kwargs.get('login')
-        self.logout = kwargs.get('logout')
 
         self._registry = {}
+
+    def authenticate(self, request):
+        """Returns the authenticated user for the current request.
+
+        By default, we return a fake user to make the site
+        accessible which is useful for quickstarting.
+
+        Override it in subclass with custom logic.
+
+        It must return None or False if the user doesn't authenticate,
+        or return a dict containing at least a username key
+        set to a truthy value:
+
+            {
+                'username': <username> or True,
+                'full_name': <full name>, # optional
+                'short_name': <short name>, # optional
+            }
+        """
+        return {'username': 'tornadmin_test_user'}
+
+    def login(self):
+        pass
+
+    def logout(self):
+        pass
 
     @classmethod
     def get_registry_key(cls, model_admin):
