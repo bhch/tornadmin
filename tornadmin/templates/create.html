@@ -19,7 +19,7 @@
         heading='%s / %s' % (admin.name, 'Edit' if obj else 'Add new'),
         back_button=True,
         add_button=True,
-        absolute_url=admin.get_absolute_url(handler, obj)
+        absolute_url=admin.get_absolute_url(handler, obj) if obj else False
     ) 
 %}
 
