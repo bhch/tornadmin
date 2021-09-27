@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tornadmin</title>
+    <link href="{{ static_url('tornadmin/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ static_url('tornadmin/vendor/bootstrap/icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ static_url('tornadmin/style.css') }}" rel="stylesheet">
+    {% block header %}{% end %}
+</head>
+<body>
+
+{% block container %}
+{% end %}
+
+<script type="text/javascript" src="{{ static_url('tornadmin/vendor/jquery-3.3.1.min.js') }}"></script>
+<script type="text/javascript" src="{{ static_url('tornadmin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+{% block footer %}{% end %}
+</body>
+</html>

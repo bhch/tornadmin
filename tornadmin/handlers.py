@@ -9,8 +9,12 @@ BASE_DIR = os.path.dirname(__file__)
 class AdminUser:
     def __init__(self, username, **kwargs):
         self.username = username
-        self.full_name = kwargs.get('full_name')
-        self.short_name = kwargs.get('short_name')
+        self.full_name = kwargs.get('full_name', '')
+        self._short_name = kwargs.get('short_name', '')
+
+    @property
+    def short_name(self):
+        return self._short_name or self.username
 
     def __bool__(self):
         if self.username:
@@ -22,7 +26,7 @@ class BaseHandler(web.RequestHandler):
     admin_site = None
 
     async def prepare(self):
-        auth_data = self.admin_site.authenticate(self.request)
+        auth_data = await self.admin_site.authenticate(self)
         if not auth_data:
             auth_data = {'username': None}
 
@@ -109,14 +113,45 @@ class StaticFileHandler(web.StaticFileHandler):
 class LoginHandler(BaseHandler):
     login_required = False
 
-    def get(self):
+    async def get(self):
         if self.current_user:
             return self.redirect('admin:index')
-        self.write("Login here")
 
+        namespace = {
+            'error': False,
+            'username': ''
+        }
+
+        self.render('login.html', **namespace)
+
+    async def post(self):
+        if self.current_user:
+            return self.redirect('admin:index')
+
+        success = await self.admin_site.login(self)
+
+        if success:
+            return self.redirect('admin:index')
+
+        namespace = {
+            'error': True,
+            'username': self.get_body_argument('username', '')
+        }
+
+        self.render('login.html', **namespace)
 
 class LogoutHandler(BaseHandler):
-    pass
+    login_required = False
+
+    async def post(self):
+        if not self.current_user:
+            return self.redirect('admin:login')
+
+        success = await self.admin_site.logout(self)
+        if success:
+            return self.redirect('admin:login')
+
+        self.redirect('admin:index')
 
 
 class IndexHandler(BaseHandler):
@@ -128,35 +163,35 @@ class IndexHandler(BaseHandler):
         for key, admin in _registry.items():
             registry.append(admin)
 
-        context = {
+        namespace = {
             'registry': registry,
         }
-        self.render('index.html', **context)
+        self.render('index.html', **namespace)
 
 
 class ListHandler(BaseHandler):
     async def get(self, app_slug, model_slug):
         admin = self.admin_site.get_registered(app_slug, model_slug)
 
-        context = {
+        namespace = {
             'admin': admin,
             'headers': admin.get_list_headers(),
             'list_items': await admin.get_list(self),
         }
 
-        self.render('list.html', **context)
+        self.render('list.html', **namespace)
 
 
 class CreateHandler(BaseHandler):
     def get(self, app_slug, model_slug):
         admin = self.admin_site.get_registered(app_slug, model_slug)
         form_class = admin.get_form(self)
-        context = {
+        namespace = {
             'obj': None,
             'admin': admin,
             'form': form_class(),
         }
-        self.render('create.html', **context)
+        self.render('create.html', **namespace)
 
     async def post(self, app_slug, model_slug,):
         admin = self.admin_site.get_registered(app_slug, model_slug)
@@ -177,12 +212,12 @@ class CreateHandler(BaseHandler):
             self.redirect('admin:detail', app_slug, model_slug, obj.id)
             return
 
-        context = {
+        namespace = {
             'obj': None,
             'admin': admin,
             'form': form,
         }
-        self.render('create.html', **context)
+        self.render('create.html', **namespace)
 
 
 
@@ -195,13 +230,13 @@ class DetailHandler(BaseHandler):
 
         form = form_class(data=data)
 
-        context = {
+        namespace = {
             'obj': obj,
             'admin': admin,
             'form': form,
         }
 
-        self.render('create.html', **context)
+        self.render('create.html', **namespace)
 
     async def post(self, app_slug, model_slug, id):
         admin = self.admin_site.get_registered(app_slug, model_slug)
@@ -226,13 +261,13 @@ class DetailHandler(BaseHandler):
                 self.redirect('admin:detail', app_slug, model_slug, obj.id)
             return
 
-        context = {
+        namespace = {
             'obj': obj,
             'admin': admin,
             'form': form,
         }
 
-        self.render('create.html', **context)
+        self.render('create.html', **namespace)
 
 
 class DeleteHandler(BaseHandler):

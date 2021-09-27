@@ -9,7 +9,7 @@ class AdminSite:
 
         self._registry = {}
 
-    def authenticate(self, request):
+    async def authenticate(self, handler):
         """Returns the authenticated user for the current request.
 
         By default, we return a fake user to make the site
@@ -27,12 +27,30 @@ class AdminSite:
                 'short_name': <short name>, # optional
             }
         """
-        return {'username': 'tornadmin_test_user'}
+        return {'username': 'tornadmin_test_user', 'short_name': 'Test User'}
 
-    def login(self):
+    async def login(self, handler):
+        """Method responsible for logging a user in.
+
+        Override this in subclass.
+
+        It must return a boolean:
+
+        - True if login succeeds or
+        - False if it fails
+        """
         pass
 
-    def logout(self):
+    async def logout(self, handler):
+        """Method responsible for logging a user out.
+
+        Override this in subclass.
+
+        It must return a boolean:
+
+        - True if logout succeeds or
+        - False if it fails
+        """
         pass
 
     @classmethod

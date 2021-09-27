@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Tornadmin</title>
-    <link href="{{ static_url('tornadmin/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ static_url('tornadmin/vendor/bootstrap/icons/bootstrap-icons.css') }}" rel="stylesheet">
-    <link href="{{ static_url('tornadmin/style.css') }}" rel="stylesheet">
-    {% block header %}{% end %}
-</head>
-<body>
+{% extends 'base_site.html' %}
 
+{% block container %}
 <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-top">
     <a class="navbar-brand" href="{{ reverse_url('admin:index') }}">
         <img src="{{ static_url('tornadmin/img/nav-logo.png') }}" alt="Tornadmin" class="d-none d-sm-block">
@@ -19,8 +11,15 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Logout</a>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                    <i class="bi bi-person-circle"></i> {{ current_user.short_name }}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <form action="{{ reverse_url('admin:logout') }}" method="POST">
+                        <input type="submit" class="dropdown-item" value="Logout">
+                    </form>
+                </div>
             </li>
         </ul>
     </div>
@@ -35,9 +34,4 @@
             {% block content %}{% end %}
         </div>
 </div>
-
-<script type="text/javascript" src="{{ static_url('tornadmin/vendor/jquery-3.3.1.min.js') }}"></script>
-<script type="text/javascript" src="{{ static_url('tornadmin/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-{% block footer %}{% end %}
-</body>
-</html>
+{% end %}
