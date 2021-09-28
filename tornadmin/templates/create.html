@@ -24,6 +24,14 @@
 %}
 
 <div class="content">
+    {% if form.errors %}
+    <div class="alert alert-danger form-error">
+        <p><strong><i class="bi bi-exclamation-circle"></i> Error</strong></p>
+        <p>
+            Please correct the errors in the form before saving
+        </p>
+    </div>
+    {% end %}
     <form method="POST">
         <div class="row">
             <div class="col-12 col-md-8 col-lg-6">
@@ -31,16 +39,23 @@
                 <div class="form-group">
                     {% if field.type in ['BooleanField', 'RadioField'] %}
                         <div class="form-check">
-                            {{ field(class_='form-check-input') }}
-                            {{ field.label(class_='form-check-label') }}
+                            {% if field.errors %}
+                                {{ field(class_='form-check-input is-invalid') }}
+                                {{ field.label(class_='form-check-label') }}
+                                <div class="invalid-feedback">{{ field.errors[0] }}</div>
+                            {% else %}
+                                {{ field(class_='form-check-input') }}
+                                {{ field.label(class_='form-check-label') }}
+                            {% end %}
                         </div>
                     {% else %}
                         {{ field.label }}
-                        {{ field(class_='form-control') }}
-                    {% end %}
-
-                    {% if field.errors %}
-                        <div class="form-text error">{{ field.errors[0] }}</div>
+                        {% if field.errors %}
+                            {{ field(class_='form-control is-invalid') }}
+                            <div class="invalid-feedback">{{ field.errors[0] }}</div>
+                        {% else %}
+                            {{ field(class_='form-control') }}
+                        {% end %}
                     {% end %}
                 </div>
                 {% end %}
