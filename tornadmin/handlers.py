@@ -1,6 +1,6 @@
 import os
 from tornado import web
-from tornadmin.utils import get_value
+from tornadmin.utils.template import get_value
 
 
 BASE_DIR = os.path.dirname(__file__)

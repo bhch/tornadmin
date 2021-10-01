@@ -1,7 +1,7 @@
 from wtforms import validators
 from wtforms import fields
 from tornadmin.backends.forms import BaseModelForm, NullDateField, NullDateTimeField
-from tornadmin.utils import get_display_name
+from tornadmin.utils.text import get_display_name
 
 
 class ModelForm(BaseModelForm):

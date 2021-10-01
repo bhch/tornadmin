@@ -1,6 +1,6 @@
 from tornadmin.backends.base import BaseModelAdmin
 from tornadmin.backends.tortoise.forms import modelform_factory
-from tornadmin.utils import split_camel, slugify, get_display_name
+from tornadmin.utils.text import split_camel, slugify, get_display_name
 
 
 class ModelAdmin(BaseModelAdmin):
