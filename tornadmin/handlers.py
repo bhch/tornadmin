@@ -9,12 +9,7 @@ BASE_DIR = os.path.dirname(__file__)
 class AdminUser:
     def __init__(self, username, **kwargs):
         self.username = username
-        self.full_name = kwargs.get('full_name', '')
-        self._short_name = kwargs.get('short_name', '')
-
-    @property
-    def short_name(self):
-        return self._short_name or self.username
+        self.display_name = kwargs.get('display_name', username)
 
     def __bool__(self):
         if self.username:

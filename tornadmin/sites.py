@@ -23,11 +23,10 @@ class BaseAdminSite:
 
             {
                 'username': <username> or True,
-                'full_name': <full name>, # optional
-                'short_name': <short name>, # optional
+                'desplay_name': <display name>, # optional
             }
         """
-        return {'username': 'tornadmin_test_user', 'short_name': 'Test User'}
+        return {'username': 'tornadmin_test_user', 'display_name': 'Test User'}
 
     async def login(self, handler):
         """Method responsible for logging a user in.
