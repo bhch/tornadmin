@@ -1,6 +1,7 @@
 class BaseModelAdmin:
     readonly_fields = []
     list_headers = []
+    items_per_page = 20
 
     def __init__(self, *args, **kwargs):
         raise NotImplementedError('Implement in subclass')
@@ -8,7 +9,7 @@ class BaseModelAdmin:
     def get_list_headers(self):
         raise NotImplementedError('Implement in subclass')
 
-    async def get_list(self, request_handler):
+    async def get_list(self, request_handler, page_num, per_page):
         raise NotImplementedError('Implement in subclass')
 
     async def get_object(self, request, id):

@@ -1,6 +1,7 @@
 import os
 from tornado import web
 from tornadmin.utils.template import get_value
+from tornadmin.utils.text import replace_qs
 
 
 BASE_DIR = os.path.dirname(__file__)
@@ -58,6 +59,7 @@ class BaseHandler(web.RequestHandler):
         namespace = super().get_template_namespace()
         namespace.update({
             'get_value': get_value,
+            'replace_qs': replace_qs,
             'admin_site': self.admin_site
         })
         return namespace
@@ -168,10 +170,15 @@ class ListHandler(BaseHandler):
     async def get(self, app_slug, model_slug):
         admin = self.admin_site.get_registered(app_slug, model_slug)
 
+        page_num = self.get_query_argument('page', 1)
+
+        list_items, page = await admin.get_list(self, page_num)
+
         namespace = {
             'admin': admin,
             'headers': admin.get_list_headers(),
-            'list_items': await admin.get_list(self),
+            'list_items': list_items,
+            'page': page
         }
 
         self.render('list.html', **namespace)

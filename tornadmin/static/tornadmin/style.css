@@ -200,6 +200,9 @@ a:hover {
         padding: 8px 15px;
     }
 }
+.content-area {
+    margin-bottom: 100px;
+}
 .content {
     background-color: #fff;
     padding: 15px;
@@ -207,7 +210,6 @@ a:hover {
     display: table;
     width: 100%;
     box-shadow: 0 0 4px rgba(0,0,0,0.1);
-    margin-bottom: 100px;
 }
 .content.table-content {
     padding: 0;
@@ -234,6 +236,29 @@ a:hover {
     margin-bottom: 30px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+}
+
+.page-link {
+    color: #008374;
+    background-color: transparent;
+    padding: 0.3rem 0.4rem;
+    border: none;
+    border-radius: 4px;
+}
+
+.page-link:hover {
+    background-color: #edebe9;
+}
+
+.page-item.active .page-link {
+    color: #000;
+    background-color: transparent;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.page-item.disabled .page-link {
+    background-color: transparent;
 }
 
 .form-footer {

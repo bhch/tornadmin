@@ -1,5 +1,6 @@
 from tornadmin.backends.base import BaseModelAdmin
 from tornadmin.backends.tortoise.forms import modelform_factory
+from tornadmin.backends.tortoise.paginator import Paginator
 from tornadmin.utils.text import split_camel, slugify, get_display_name
 
 
@@ -22,8 +23,14 @@ class ModelAdmin(BaseModelAdmin):
                 headers.append((header, get_display_name(header)))
         return headers
 
-    async def get_list(self, request_handler):
-        return await self.model.all().order_by('-id')
+    async def get_list(self, request_handler, page_num):
+        queryset = self.model.all()
+
+        count = await queryset.count()
+
+        paginator = Paginator(queryset, per_page=self.items_per_page, count=count)
+        page = paginator.get_page(page_num)
+        return (await page.objects.order_by('-id'), page)
 
     async def get_object(self, request_handler, id):
         return await self.model.get(id=id)
