@@ -34,9 +34,12 @@ class ModelAdmin(BaseModelAdmin):
         page_queryset = page.objects
 
         # fetch related fields which are also shown on list page table
+        # :TODO: pre-fetch chained related fields
         related_fields = []
         for header in self.get_list_headers():
             field = header[0]
+            if '__' in field:
+                field = field.split('__')[0]
             if field in self.model._meta.fk_fields:
                 related_fields.append(field)
 

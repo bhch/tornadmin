@@ -1,6 +1,6 @@
 import os
 from tornado import web
-from tornadmin.utils.template import get_value
+from tornadmin.utils.template import get_value, get_chained_attr
 from tornadmin.utils.text import replace_qs
 
 
@@ -59,6 +59,7 @@ class BaseHandler(web.RequestHandler):
         namespace = super().get_template_namespace()
         namespace.update({
             'get_value': get_value,
+            'get_chained_attr': get_chained_attr,
             'replace_qs': replace_qs,
             'admin_site': self.admin_site
         })
