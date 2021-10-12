@@ -44,9 +44,9 @@ class ModelAdmin(BaseModelAdmin):
                 related_fields.append(field)
 
         if related_fields:
-            page_list = await page_queryset.prefetch_related(*related_fields)
+            page_list = await page_queryset.order_by('-id').prefetch_related(*related_fields)
         else:
-            page_list = await page_queryset
+            page_list = await page_queryset.order_by('-id')
 
         return (page_list, page)
 
