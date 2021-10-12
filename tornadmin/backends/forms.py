@@ -1,5 +1,6 @@
 from wtforms import Form, fields
 from wtforms.fields.html5 import DateField
+from tornadmin.backends.widgets import Select
 
 
 class BaseModelForm(Form):
@@ -28,3 +29,7 @@ class NullDateField(DateField):
         super().process_data(value)
         if self.data == '':
             self.data = None
+
+
+class SelectField(fields.SelectField):
+    widget = Select()

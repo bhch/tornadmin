@@ -15,6 +15,7 @@ class ModelAdmin(BaseModelAdmin):
         self.app_slug = slugify(self.app)
 
     def get_list_headers(self):
+        # :TODO: cache this function
         headers = []
         for header in self.list_headers:
             if isinstance(header, tuple) or isinstance(header, list):
@@ -30,7 +31,21 @@ class ModelAdmin(BaseModelAdmin):
 
         paginator = Paginator(queryset, per_page=self.items_per_page, count=count)
         page = paginator.get_page(page_num)
-        return (await page.objects.order_by('-id'), page)
+        page_queryset = page.objects
+
+        # fetch related fields which are also shown on list page table
+        related_fields = []
+        for header in self.get_list_headers():
+            field = header[0]
+            if field in self.model._meta.fk_fields:
+                related_fields.append(field)
+
+        if related_fields:
+            page_list = await page_queryset.prefetch_related(*related_fields)
+        else:
+            page_list = await page_queryset
+
+        return (page_list, page)
 
     async def get_object(self, request_handler, id):
         return await self.model.get(id=id)

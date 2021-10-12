@@ -185,13 +185,15 @@ class ListHandler(BaseHandler):
 
 
 class CreateHandler(BaseHandler):
-    def get(self, app_slug, model_slug):
+    async def get(self, app_slug, model_slug):
         admin = self.admin_site.get_registered(app_slug, model_slug)
         form_class = admin.get_form(self)
+        form = form_class()
+        await form.set_field_choices(self)
         namespace = {
             'obj': None,
             'admin': admin,
-            'form': form_class(),
+            'form': form,
         }
         self.render('create.html', **namespace)
 
@@ -208,6 +210,8 @@ class CreateHandler(BaseHandler):
             data[field_name] = self.get_body_argument(field_name, None)
 
         form = form_class(data=data)
+
+        await form.set_field_choices(self)
 
         if form.validate():
             obj = await admin.save_model(self, form)
@@ -231,6 +235,7 @@ class DetailHandler(BaseHandler):
         data = await admin.get_form_data(obj)
 
         form = form_class(data=data)
+        await form.set_field_choices(self)
 
         namespace = {
             'obj': obj,
@@ -254,6 +259,7 @@ class DetailHandler(BaseHandler):
             data[field_name] = self.get_body_argument(field_name, None)
 
         form = form_class(data=data)
+        await form.set_field_choices(self)
 
         if form.validate():
             await admin.save_model(self, form, obj)
