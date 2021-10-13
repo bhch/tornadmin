@@ -1,8 +1,10 @@
 class BaseModelAdmin:
-    readonly_fields = []
     list_headers = []
     items_per_page = 20
+    fields = []
+    exclude = []
     prefetch_fields = []
+    readonly_fields = []
 
     def __init__(self, *args, **kwargs):
         raise NotImplementedError('Implement in subclass')

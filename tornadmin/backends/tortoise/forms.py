@@ -78,6 +78,13 @@ def modelform_factory(admin, model):
 
     for field_name, model_field in model._meta.fields_map.items():
 
+        if admin.fields:
+            if field_name not in admin.fields:
+                continue
+
+        if field_name in admin.exclude:
+            continue
+
         if field_name not in admin.readonly_fields:
             if model_field.pk:
                 continue
