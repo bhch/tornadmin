@@ -86,6 +86,8 @@ def modelform_factory(admin, model):
 
         if model_field.required and field_name not in admin.readonly_fields:
             validators_list.append(validators.required())
+        else:
+            validators_list.append(validators.optional())
 
         if hasattr(model_field, 'max_length'):
             validators_list.append(validators.Length(max=model_field.max_length))
