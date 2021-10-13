@@ -241,7 +241,7 @@ class DetailHandler(BaseHandler):
         data = await admin.get_form_data(obj)
 
         form = form_class(data=data)
-        await form.set_field_choices(self)
+        await form.set_field_choices(self, obj=obj)
 
         namespace = {
             'obj': obj,
@@ -269,7 +269,7 @@ class DetailHandler(BaseHandler):
                 data[field_name] = None
 
         form = form_class(formdata=data)
-        await form.set_field_choices(self)
+        await form.set_field_choices(self, obj=obj)
 
         if form.validate():
             await admin.save_model(self, form, obj)

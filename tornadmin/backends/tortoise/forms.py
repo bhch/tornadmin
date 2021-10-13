@@ -4,29 +4,39 @@ from tornadmin.backends.forms import (
     BaseModelForm, NullDateField, NullDateTimeField, SelectField,
 )
 from tornadmin.utils.text import get_display_name
+from tortoise.query_utils import Q
 
 
 class ModelForm(BaseModelForm):
-    async def set_field_choices(self, request_handler):
+    async def set_field_choices(self, request_handler, obj=None):
         """Sets choices foreignkey and manytomany fields"""
         for field_name in self.Meta.model._meta.fk_fields | self.Meta.model._meta.o2o_fields:
             form_field = getattr(self, '%s_id' % field_name)
-            choices = await self._get_field_choices(request_handler, field_name)
+            choices = await self._get_field_choices(request_handler, field_name, obj)
             form_field.choices = choices
 
         for field_name in self.Meta.model._meta.m2m_fields:
             form_field = getattr(self, field_name)
-            choices = await self._get_field_choices(request_handler, field_name)
+            choices = await self._get_field_choices(request_handler, obj, field_name)
             form_field.choices = choices
 
-    async def _get_field_choices(self, request_handler, field_name):
+    async def _get_field_choices(self, request_handler, field_name, obj=None):
         """Returns choices for the given field name."""
 
         if hasattr(self, 'get_%s_choices' % field_name):
             return await getattr(self, 'get_%s_choices' % field_name)(request_handler)
 
         model_field = self.Meta.model._meta.fields_map[field_name]
-        objects = await model_field.related_model.all()
+        if field_name in self.Meta.model._meta.o2o_fields:
+            if obj:
+                objects = await model_field.related_model.filter(
+                    Q(**{model_field.related_name: None}) |
+                    Q(**{model_field.related_name: obj.id})
+                )
+            else:
+                objects = await model_field.related_model.filter(**{model_field.related_name: None})
+        else:
+            objects = await model_field.related_model.all()
         return [(obj.id, str(obj)) for obj in objects]
 
 
