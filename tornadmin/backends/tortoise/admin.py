@@ -40,7 +40,7 @@ class ModelAdmin(BaseModelAdmin):
             field = header[0]
             if '__' in field:
                 field = field.split('__')[0]
-            if field in self.model._meta.fk_fields:
+            if field in [*self.model._meta.fk_fields, *self.model._meta.o2o_fields]:
                 related_fields.append(field)
 
         if related_fields:

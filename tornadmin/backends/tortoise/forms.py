@@ -9,7 +9,7 @@ from tornadmin.utils.text import get_display_name
 class ModelForm(BaseModelForm):
     async def set_field_choices(self, request_handler):
         """Sets choices foreignkey and manytomany fields"""
-        for field_name in self.Meta.model._meta.fk_fields:
+        for field_name in self.Meta.model._meta.fk_fields | self.Meta.model._meta.o2o_fields:
             form_field = getattr(self, '%s_id' % field_name)
             choices = await self._get_field_choices(request_handler, field_name)
             form_field.choices = choices
@@ -59,7 +59,7 @@ def modelform_factory(admin, model):
     fields = {}
     fk_id_fields = []
 
-    for field_name in model._meta.fk_fields:
+    for field_name in model._meta.fk_fields | model._meta.o2o_fields:
         fk_id_fields.append('%s_id' % field_name)
 
     for field_name, model_field in model._meta.fields_map.items():
@@ -98,10 +98,11 @@ def modelform_factory(admin, model):
 
         is_fk = field_name in model._meta.fk_fields
         is_m2m = field_name in model._meta.m2m_fields
+        is_o2o = field_name in model._meta.o2o_fields
 
-        form_field = tortoise_to_wtf(model_field, is_fk=is_fk)
+        form_field = tortoise_to_wtf(model_field, is_fk=is_fk or is_o2o)
 
-        if is_fk:
+        if is_fk or is_o2o:
             # For foreignkeys, we'll render a select input
             # with the "_id" appended to the name
             field_name = '%s_id' % field_name
