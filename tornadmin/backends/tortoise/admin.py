@@ -35,7 +35,7 @@ class ModelAdmin(BaseModelAdmin):
 
         # fetch related fields which are also shown on list page table
         # :TODO: pre-fetch chained related fields
-        related_fields = []
+        related_fields = [field for field in self.prefetch_fields]
         for header in self.get_list_headers():
             field = header[0]
             if '__' in field:
