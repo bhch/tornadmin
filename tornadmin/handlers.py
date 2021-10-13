@@ -1,5 +1,6 @@
 import os
 from tornado import web
+from multidict import MultiDict
 from tornadmin.utils.template import get_value, get_chained_attr
 from tornadmin.utils.text import replace_qs
 
@@ -202,15 +203,19 @@ class CreateHandler(BaseHandler):
         admin = self.admin_site.get_registered(app_slug, model_slug)
         form_class = admin.get_form(self)
         
-        data = {}
+        data = MultiDict()
 
         for field_name in form_class._fields:
-            # NOTE: Implement a multivaluedict to store values in a list
+            # :TODO: Implement a multivaluedict to store values in a list
             # instead of using data dictionary
             # because the current way doesn't allow multiple values.
-            data[field_name] = self.get_body_argument(field_name, None)
+            value = self.get_body_arguments(field_name, None)
+            if value:
+                data.extend(list(zip([field_name] * len(value), value)))
+            else:
+                data[field_name] = None
 
-        form = form_class(data=data)
+        form = form_class(formdata=data)
 
         await form.set_field_choices(self)
 
@@ -251,15 +256,19 @@ class DetailHandler(BaseHandler):
         form_class = admin.get_form(self)
         obj = await admin.get_object(self, id)
 
-        data = {}
+        data = MultiDict()
 
         for field_name in form_class._fields:
             # :TODO: Implement a multivaluedict to store values in a list
             # instead of using data dictionary
             # because the current way doesn't allow multiple values.
-            data[field_name] = self.get_body_argument(field_name, None)
+            value = self.get_body_arguments(field_name, None)
+            if value:
+                data.extend(list(zip([field_name] * len(value), value)))
+            else:
+                data[field_name] = None
 
-        form = form_class(data=data)
+        form = form_class(formdata=data)
         await form.set_field_choices(self)
 
         if form.validate():

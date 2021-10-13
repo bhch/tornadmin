@@ -14,6 +14,11 @@ class ModelForm(BaseModelForm):
             choices = await self._get_field_choices(request_handler, field_name)
             form_field.choices = choices
 
+        for field_name in self.Meta.model._meta.m2m_fields:
+            form_field = getattr(self, field_name)
+            choices = await self._get_field_choices(request_handler, field_name)
+            form_field.choices = choices
+
     async def _get_field_choices(self, request_handler, field_name):
         """Returns choices for the given field name."""
 
@@ -36,6 +41,7 @@ TORTOISE_TO_WTF_MAP = {
     'SmallIntField': fields.IntegerField,
     'TextField': fields.TextAreaField,
     'ForeignKeyField': SelectField,
+    'ManyToManyFieldInstance': fields.SelectMultipleField,
 }
 
 
@@ -84,12 +90,14 @@ def modelform_factory(admin, model):
         if hasattr(model_field, 'max_length'):
             validators_list.append(validators.Length(max=model_field.max_length))
 
+        field_kwargs = {}
         attrs = {'placeholder': name}
 
         if field_name in admin.readonly_fields:
             attrs['readonly'] = True
 
         is_fk = field_name in model._meta.fk_fields
+        is_m2m = field_name in model._meta.m2m_fields
 
         form_field = tortoise_to_wtf(model_field, is_fk=is_fk)
 
@@ -98,10 +106,14 @@ def modelform_factory(admin, model):
             # with the "_id" appended to the name
             field_name = '%s_id' % field_name
 
+        if is_fk or is_m2m:
+            field_kwargs['coerce'] = int # :TODO: use the type of primary key
+
         fields[field_name] = form_field(
             name,
             validators_list,
             render_kw=attrs,
+            **field_kwargs
         )
 
     fields['_fields'] = list(fields.keys())

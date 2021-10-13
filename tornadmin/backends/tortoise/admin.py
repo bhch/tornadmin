@@ -55,10 +55,16 @@ class ModelAdmin(BaseModelAdmin):
 
     async def get_form_data(self, obj):
         """Returns initial form data from the given model object"""
+        # first fetch related fields
+        await obj.fetch_related(*obj._meta.fk_fields, *obj._meta.m2m_fields)
+
         data = {}
 
         for field_name, model_field in obj._meta.fields_map.items():
-            data[field_name] = getattr(obj, field_name)
+            if field_name in obj._meta.m2m_fields:
+                data[field_name] = [item.id for item in getattr(obj, field_name)]
+            else:
+                data[field_name] = getattr(obj, field_name)
 
         return data
 
@@ -69,8 +75,44 @@ class ModelAdmin(BaseModelAdmin):
     async def save_model(self, request_handler, form, obj=None):
         if obj:
             for field in form._fields:
+                if field in obj._meta.m2m_fields:
+                    continue
                 setattr(obj, field, getattr(form, field).data)
             await obj.save()
         else:
-            obj = await self.model.create(**form.data)
+            data = {}
+            for field, value in form.data.items():
+                if field not in self.model._meta.m2m_fields:
+                    data[field] = value
+
+            obj = await self.model.create(**data)
+
+        await self.save_m2m(request_handler, form, obj)
+
         return obj
+
+    async def save_m2m(self, request_handler, form, obj):
+        for field in form._fields:
+            if not field in obj._meta.m2m_fields:
+                continue
+
+            await obj.fetch_related(field)
+
+            model_field = getattr(obj, field)
+
+            current = {related.id for related in model_field}
+
+            data = set(getattr(form, field).data)
+
+            to_add = set()
+            for id in data:
+                if id not in current:
+                    to_add.add(await model_field.remote_model.get(id=id))
+
+            to_remove = {related for related in model_field if related.id in current - data}
+
+            if len(to_add):
+                await model_field.add(*to_add)
+
+            if len(to_remove):
+                await model_field.remove(*to_remove)
