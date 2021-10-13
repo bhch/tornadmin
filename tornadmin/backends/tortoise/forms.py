@@ -17,7 +17,7 @@ class ModelForm(BaseModelForm):
 
         for field_name in self.Meta.model._meta.m2m_fields:
             form_field = getattr(self, field_name)
-            choices = await self._get_field_choices(request_handler, obj, field_name)
+            choices = await self._get_field_choices(request_handler, field_name, obj)
             form_field.choices = choices
 
     async def _get_field_choices(self, request_handler, field_name, obj=None):
