@@ -11,12 +11,16 @@ class ModelForm(BaseModelForm):
     async def set_field_choices(self, request_handler, obj=None):
         """Sets choices foreignkey and manytomany fields"""
         for field_name in self.Meta.model._meta.fk_fields | self.Meta.model._meta.o2o_fields:
-            form_field = getattr(self, '%s_id' % field_name)
+            form_field = getattr(self, '%s_id' % field_name, None)
+            if not form_field:
+                continue
             choices = await self._get_field_choices(request_handler, field_name, obj)
             form_field.choices = choices
 
         for field_name in self.Meta.model._meta.m2m_fields:
-            form_field = getattr(self, field_name)
+            form_field = getattr(self, field_name, None)
+            if not form_field:
+                continue
             choices = await self._get_field_choices(request_handler, field_name, obj)
             form_field.choices = choices
 
@@ -88,6 +92,9 @@ def modelform_factory(admin, model):
             continue
 
         if field_name in model._meta.backward_fk_fields:
+            continue
+
+        if field_name in model._meta.backward_o2o_fields:
             continue
 
         name = get_display_name(field_name)
