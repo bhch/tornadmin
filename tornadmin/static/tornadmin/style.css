@@ -314,14 +314,14 @@ label {
 .side-nav li a:focus {
     background-color: #f0fbfa;
 }
-.side-nav li a.active {
+.side-nav li.active a {
     color: #0a766c;
     background-color: #e1dfdd;
 }
-.side-nav li a.active:hover {
+.side-nav li.active a:hover {
     background-color: #d2d0ce;
 }
-.side-nav li a.active:focus {
+.side-nav li.active a:focus {
     box-shadow: 0 0 0 0.2rem rgba(130, 168, 164, 0.5);
 }
 .side-nav li a svg {

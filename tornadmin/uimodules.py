@@ -2,7 +2,7 @@ from tornado import web
 
 
 class SideNav(web.UIModule):
-    def render(self, admin_site):
+    def render(self, handler):
         """menu structure:
 
             {
@@ -12,12 +12,21 @@ class SideNav(web.UIModule):
         """
         menu = {}
 
-        _registry = admin_site.get_registry()
+        _registry = handler.admin_site.get_registry()
 
-        for key, admin in _registry.items():
+        if handler.path_kwargs:
+            # :TODO: Use BaseAdminSite's get_registry_key method to generate key
+            active_key = '%s.%s' % (handler.path_kwargs['app_slug'], handler.path_kwargs['model_slug'])
+        else:
+            active_key = ''
+        active_item = None # Home
+
+        for index, (key, admin) in enumerate(_registry.items()):
             if admin.app not in menu:
                 menu[admin.app] = []
 
             menu[admin.app].append(admin)
+            if key == active_key:
+                active_item = admin
 
-        return self.render_string('modules/side-nav.html', menu=menu)
+        return self.render_string('modules/side-nav.html', menu=menu, active_item=active_item)
