@@ -367,7 +367,7 @@ label {
     margin-right: -15px;
 }
 .table-content {
-    padding: 0 15px;
+    padding: 0 15px 15px;
     display: table;
     width: 100%;
 }
