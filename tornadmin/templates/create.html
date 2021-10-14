@@ -3,16 +3,6 @@
 
 {% block content %}
 
-<style>
-    label {
-        width: 130px;
-        display: inline-block;
-    }
-    .form-group {
-        margin-bottom: 15px;
-    }
-</style>
-
 {% module Template(
         'modules/header.html',
         admin=admin,
@@ -37,24 +27,34 @@
             <div class="col-12 col-md-8 col-lg-6">
                 {% for field in form %}
                 <div class="form-group">
+                    {% if field.type == 'BooleanField' %}
+                        {%set input_class = 'custom-control custom-checkbox' %}
+                    {% elif field.type == 'RadioField' %}
+                        {%set input_class = 'custom-control custom-radio' %}
+                    {% elif field.type == 'SelectField'  %}
+                        {%set input_class = 'custom-select' %}
+                    {% else %}
+                        {%set input_class = 'form-control' %}
+                    {% end %}
+
                     {% if field.type in ['BooleanField', 'RadioField'] %}
-                        <div class="form-check">
+                        <div class="{{ input_class }}">
                             {% if field.errors %}
-                                {{ field(class_='form-check-input is-invalid') }}
-                                {{ field.label(class_='form-check-label') }}
+                                {{ field(class_='custom-control-input is-invalid') }}
+                                {{ field.label(class_='custom-control-label') }}
                                 <div class="invalid-feedback">{{ field.errors[0] }}</div>
                             {% else %}
-                                {{ field(class_='form-check-input') }}
-                                {{ field.label(class_='form-check-label') }}
+                                {{ field(class_='custom-control-input') }}
+                                {{ field.label(class_='custom-control-label') }}
                             {% end %}
                         </div>
                     {% else %}
                         {{ field.label }}
                         {% if field.errors %}
-                            {{ field(class_='form-control is-invalid') }}
+                            {{ field(class_=input_class + ' is-invalid') }}
                             <div class="invalid-feedback">{{ field.errors[0] }}</div>
                         {% else %}
-                            {{ field(class_='form-control') }}
+                            {{ field(class_=input_class) }}
                         {% end %}
                     {% end %}
                 </div>
@@ -90,8 +90,8 @@
             <div class="modal-footer">
                 {% if obj %}
                 <form action="{{ reverse_url('admin:delete', admin.app_slug, admin.slug, obj.id) }}" method="POST">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-outline-danger">Delete</button>
                 </form>
                 {% end %}
             </div>

@@ -1,26 +1,17 @@
 <div class="header">
     <div class="row">
-        <div class="col-12 col-md-6">
+        <div class="col-12 col-md-5">
             <h2 class="page-heading">
                 {{ heading }}
             </h2>
         </div>
-        <div class="col-12 col-md-6 text-md-right">
+        <div class="col-12 col-md-7 text-md-right">
             {% if back_button %}
             <a 
                 href="{{ reverse_url('admin:list', admin.app_slug, admin.slug) }}"
                 class="btn btn-light"
             >
-                <i class="bi bi-arrow-left"></i> Back
-            </a>
-            {% end %}
-
-            {% if add_button %}
-            <a 
-                href="{{ reverse_url('admin:create', admin.app_slug, admin.slug) }}"
-                class="btn btn-accent"
-            >
-                <i class="bi bi-plus"></i> Add new
+                <i class="bi bi-arrow-left"></i> View all
             </a>
             {% end %}
 
@@ -31,6 +22,15 @@
                 target="_blank"
             >
                 <i class="bi bi-eye"></i> View on site
+            </a>
+            {% end %}
+
+            {% if add_button %}
+            <a 
+                href="{{ reverse_url('admin:create', admin.app_slug, admin.slug) }}"
+                class="btn btn-accent"
+            >
+                <i class="bi bi-plus-lg"></i> Add new
             </a>
             {% end %}
         </div>
