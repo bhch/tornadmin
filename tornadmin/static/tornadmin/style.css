@@ -427,6 +427,33 @@ label {
     padding-bottom: 15px;
     margin-top: 15px;
 }
+
+.login-splash {
+    display: block;
+    max-width: 140px;
+    margin: auto;
+    margin-bottom: 30px;
+}
+
+.card {
+    border-color: #e1dfdd;
+}
+.login-container {
+    margin-top: -30px;
+}
+.login-card {
+    margin-bottom: 5rem;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.075);
+}
+.login-card .card-header {
+    border-bottom: 1px solid #e1dfdd;
+    text-align: center;
+    font-size: 1.4rem;
+    font-weight: bold;
+    background-color: transparent;
+    padding-top: 0.8rem;
+    padding-bottom: 0.8rem;
+}
 @media (max-width: 575px) {
     body {
         background-color: #f0f2f2;
