@@ -173,14 +173,16 @@ class ListHandler(BaseHandler):
         admin = self.admin_site.get_registered(app_slug, model_slug)
 
         page_num = self.get_query_argument('page', 1)
+        q = self.get_query_argument('q', '')
 
-        list_items, page = await admin.get_list(self, page_num)
+        list_items, page = await admin.get_list(self, page_num=page_num, q=q)
 
         namespace = {
             'admin': admin,
             'headers': admin.get_list_headers(),
             'list_items': list_items,
-            'page': page
+            'page': page,
+            'q': q,
         }
 
         self.render('list.html', **namespace)

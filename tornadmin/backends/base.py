@@ -12,7 +12,7 @@ class BaseModelAdmin:
     def get_list_headers(self):
         raise NotImplementedError('Implement in subclass')
 
-    async def get_list(self, request_handler, page_num, per_page):
+    async def get_list(self, request_handler, page_num, q):
         raise NotImplementedError('Implement in subclass')
 
     async def get_object(self, request, id):

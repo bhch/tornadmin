@@ -24,8 +24,11 @@ class ModelAdmin(BaseModelAdmin):
                 headers.append((header, get_display_name(header)))
         return headers
 
-    async def get_list(self, request_handler, page_num):
+    async def get_list(self, request_handler, page_num, q):
         queryset = self.model.all()
+
+        if q:
+            queryset = self.get_search_results(queryset, q)
 
         count = await queryset.count()
 
@@ -49,6 +52,9 @@ class ModelAdmin(BaseModelAdmin):
             page_list = await page_queryset.order_by('-id')
 
         return (page_list, page)
+
+    def get_search_results(self, queryset, search_term):
+        raise NotImplementedError('Implement in subclass')
 
     async def get_object(self, request_handler, id):
         return await self.model.get(id=id)
