@@ -1,3 +1,4 @@
 Sphinx==3.5.2
 sphinx-rtd-theme==0.5.2
 tornado==6.1
+multidict==5.2.0
