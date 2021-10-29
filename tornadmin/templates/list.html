@@ -28,9 +28,15 @@
         </div>
     </div>
     <div class="table-container">
-        <table class="table table-hover">
+        <table class="table table-hover table-checkable">
             <thead>
                 <tr>
+                    <th>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input" type="checkbox" id="list_check_all" autocomplete="off">
+                            <label class="custom-control-label" for="list_check_all"></label>
+                        </div>
+                    </th>
                     {% for header in headers %}
                         <th>{{ header[1] }}</th>
                     {% end %}
@@ -40,6 +46,12 @@
                 
             {% for item in list_items %}
                 <tr>
+                    <td>
+                        <div class="custom-control custom-checkbox">
+                            <input class="custom-control-input list-check" type="checkbox" id="list_check_{{ item.id }}" autocomplete="off">
+                            <label class="custom-control-label" for="list_check_{{ item.id }}"></label>
+                        </div>
+                    </td>
                     {% for index, header in enumerate(headers) %}
                         {% set value = get_value(get_chained_attr(item, header[0])) %}
                         <td>
