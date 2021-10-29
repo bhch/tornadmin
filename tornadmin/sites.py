@@ -37,6 +37,9 @@ class BaseAdminSite:
 
         - True if login succeeds or
         - False if it fails
+
+        You can also supply custom error message when login fails by returning a tuple:
+        - False, 'Custom error message'
         """
         pass
 

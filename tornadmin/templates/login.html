@@ -10,7 +10,7 @@
                 <div class="card-body">
                     {% if error %}
                     <div class="alert alert-danger">
-                        Wrong username or password
+                        {{ message }}
                     </div>
                     {% end %}
                     <form action="{{ reverse_url('admin:login') }}" method="POST">

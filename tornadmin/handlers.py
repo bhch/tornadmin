@@ -129,11 +129,17 @@ class LoginHandler(BaseHandler):
 
         success = await self.admin_site.login(self)
 
+        if isinstance(success, tuple):
+            success, message = success
+        else:
+            message = 'Wrong username or password'
+
         if success:
             return self.redirect('admin:index')
 
         namespace = {
             'error': True,
+            'message': message,
             'username': self.get_body_argument('username', '')
         }
 
