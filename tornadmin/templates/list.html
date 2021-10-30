@@ -12,6 +12,8 @@
     ) 
 %}
 
+{% set actions = admin.get_actions(handler) %}
+
 <div class="content">
     <div class="list-header">
         <div class="row">
@@ -24,6 +26,42 @@
                         <input type="text" name="q" class="form-control" placeholder="Search..." value="{{ q }}">
                     </div>
                 </form>
+            </div>
+            <div class="col-12 col-md-6 col-xl-8 mt-4 mt-md-0 text-left text-md-right">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" data-display="static">
+                        <i class="bi bi-sliders"></i> Actions
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-md-right">
+                        <form id="actionForm" action="{{ reverse_url('admin:list', admin.app_slug, admin.slug) }}" method="POST">
+                            {% for action in actions %}
+                            {% if action.require_confirmation %}
+                            <button
+                                type="button"
+                                class="dropdown-item"
+                                data-newTab="{{ action.new_tab }}"
+                                {% if action.require_confirmation %}
+                                data-toggle="modal"
+                                data-target="#{{action.__name__}}Modal"
+                                {% end %}
+                            >
+                                {{ action.label }}
+                            </button>
+                            {% else %}
+                            <button
+                                class="dropdown-item"
+                                type="submit"
+                                name="_action"
+                                value="{{ action.__name__ }}"
+                                {% if action.new_tab %}formtarget="_blank"{% end %}
+                            >
+                                {{ action.label }}
+                            </button>
+                            {% end %}
+                            {% end %}
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -48,7 +86,7 @@
                 <tr>
                     <td>
                         <div class="custom-control custom-checkbox">
-                            <input class="custom-control-input list-check" type="checkbox" id="list_check_{{ item.id }}" autocomplete="off">
+                            <input class="custom-control-input list-check" type="checkbox" id="list_check_{{ item.id }}" autocomplete="off" name="_selected" form="actionForm" value="{{ item.id }}">
                             <label class="custom-control-label" for="list_check_{{ item.id }}"></label>
                         </div>
                     </td>
@@ -68,6 +106,42 @@
         </table>
     </div>
 </div>
+
+{% for action in actions %}
+{% if action.require_confirmation %}
+<!-- Action confirmation Modal -->
+<div class="modal fade scale" id="{{ action.__name__ }}Modal" tabindex="-1" aria-labelledby="{{ action.__name__ }}ModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="{{ action.__name__ }}ModalLabel">{{ action.modal_title }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="bi bi-x"></i></span>
+                </button>
+            </div>
+        
+            <div class="modal-body py-4">
+                {{ action.modal_body }}
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal">Close</button>
+                <button
+                    class="btn btn-{{ action.modal_button_class }}"
+                    type="submit"
+                    name="_action"
+                    value="{{ action.__name__ }}"
+                    form="actionForm"
+                    {% if action.new_tab %}formtarget="_blank"{% end %}
+                >
+                    {{ action.modal_button_label }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% end %}
+{% end %}
 
 {% include 'modules/pagination.html' %}
 

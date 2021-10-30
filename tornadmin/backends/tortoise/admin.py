@@ -1,6 +1,7 @@
 from tornadmin.backends.base import BaseModelAdmin
 from tornadmin.backends.tortoise.forms import modelform_factory
 from tornadmin.backends.tortoise.paginator import Paginator
+from tornadmin.backends.tortoise.actions import delete_selected
 from tornadmin.utils.text import split_camel, slugify, get_display_name
 
 
@@ -55,6 +56,17 @@ class ModelAdmin(BaseModelAdmin):
 
     def get_search_results(self, queryset, search_term):
         raise NotImplementedError('Implement in subclass')
+
+    def get_actions(self, request_handler):
+        actions = super().get_actions(request_handler)
+        actions.append(delete_selected)
+        return actions
+
+    async def get_action_queryset(self, request_handler, action_name, selected, selected_all):
+        if selected_all:
+            return self.self.model.all()
+        else:
+            return self.model.filter(id__in=selected)
 
     async def get_object(self, request_handler, id):
         return await self.model.get(id=id)

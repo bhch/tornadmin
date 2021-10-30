@@ -193,6 +193,27 @@ class ListHandler(BaseHandler):
 
         self.render('list.html', **namespace)
 
+    async def post(self, app_slug, model_slug):
+        admin = self.admin_site.get_registered(app_slug, model_slug)
+
+        action_name = self.get_body_argument('_action')
+        selected = self.get_body_arguments('_selected')
+        selected_all = self.get_body_argument('_selected_all', False)
+
+        queryset = await admin.get_action_queryset(self, action_name, selected, selected_all)
+        action = admin.get_action(self, action_name)
+
+        if action:
+            if hasattr(admin, action_name):
+                await action(self, queryset)
+            else:
+                await action(admin, self, queryset)
+
+            if self._finished:
+                return
+
+        return self.redirect('admin:list', app_slug, model_slug)
+
 
 class CreateHandler(BaseHandler):
     async def get(self, app_slug, model_slug):
