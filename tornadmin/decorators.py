@@ -6,6 +6,7 @@ def action(
     *,
     label=None,
     new_tab=False,
+    require_selection=True,
     require_confirmation=False,
     modal_title=None,
     modal_body=None,
@@ -20,6 +21,7 @@ def action(
 
         func.label = label
         func.new_tab = new_tab
+        func.require_selection = require_selection
         func.require_confirmation = require_confirmation
 
         if require_confirmation:
