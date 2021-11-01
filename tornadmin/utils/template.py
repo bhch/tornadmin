@@ -11,7 +11,7 @@ def get_value(variable):
     whether a variable is callable or not.
     """
     if callable(variable):
-        return variable()
+        return get_value(variable())
 
     return variable
 
