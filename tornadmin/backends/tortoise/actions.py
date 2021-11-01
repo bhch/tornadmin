@@ -1,4 +1,5 @@
 from tornadmin.decorators import action
+from tornadmin.utils.text import pluralize
 
 
 @action(
@@ -9,5 +10,8 @@ from tornadmin.decorators import action
     modal_button_label='Delete',
     modal_button_class='outline-danger'
 )
-async def delete_selected(admin, handler, queryset):
-    await queryset.delete()
+async def delete_selected(admin, request_handler, queryset):
+    count = await queryset.count()
+    if count:
+        await queryset.delete()
+        request_handler.flash('success', 'Successfully deleted %s %s' % (count, pluralize('item', 'items', count)))
