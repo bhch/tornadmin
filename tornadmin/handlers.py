@@ -202,17 +202,23 @@ class ListHandler(BaseHandler):
         selected = self.get_body_arguments('_selected')
         selected_all = self.get_body_argument('_selected_all', False)
 
-        queryset = await admin.get_action_queryset(self, action_name, selected, selected_all)
         action = admin.get_action(self, action_name)
 
         if action:
-            if hasattr(admin, action_name):
-                await action(self, queryset)
+            if action.require_selection and (not selected and not selected_all) :
+                self.flash('warning', 'Please select items to run this action. No action was performed.')
             else:
-                await action(admin, self, queryset)
+                queryset = await admin.get_action_queryset(self, action_name, selected, selected_all)
 
-            if self._finished:
-                return
+                if hasattr(admin, action_name):
+                    await action(self, queryset)
+                else:
+                    await action(admin, self, queryset)
+
+                if self._finished:
+                    return
+        else:
+            self.flash('error', 'This action is not available')
 
         return self.redirect('admin:list', app_slug, model_slug)
 
@@ -252,6 +258,7 @@ class CreateHandler(BaseHandler):
 
         if form.validate():
             obj = await admin.save_model(self, form)
+            self.flash('success', '1 item was created successfully')
             self.redirect('admin:detail', app_slug, model_slug, obj.id)
             return
 
@@ -304,6 +311,7 @@ class DetailHandler(BaseHandler):
 
         if form.validate():
             await admin.save_model(self, form, obj)
+            self.flash('success', 'Item was changed successfully')
             if self.get_body_argument('_addanother', False):
                 self.redirect('admin:create', app_slug, model_slug)
             else:
@@ -327,5 +335,6 @@ class DeleteHandler(BaseHandler):
 
         # :TODO: check if user has delete permission
         await obj.delete()
+        self.flash('success', '1 item was deleted successfully')
 
         self.redirect('admin:list', app_slug, model_slug)
