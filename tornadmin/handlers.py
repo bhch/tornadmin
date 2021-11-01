@@ -2,7 +2,7 @@ import os
 from tornado import web
 from multidict import MultiDict
 from tornadmin.utils.template import get_value, get_chained_attr
-from tornadmin.utils.text import replace_qs
+from tornadmin.utils.text import replace_qs, pluralize
 from tornadmin.flash import FlashMixin
 
 
@@ -60,10 +60,11 @@ class BaseHandler(web.RequestHandler, FlashMixin):
     def get_template_namespace(self):
         namespace = super().get_template_namespace()
         namespace.update({
+            'admin_site': self.admin_site,
             'get_value': get_value,
             'get_chained_attr': get_chained_attr,
             'replace_qs': replace_qs,
-            'admin_site': self.admin_site
+            'pluralize': pluralize,
         })
         return namespace
 

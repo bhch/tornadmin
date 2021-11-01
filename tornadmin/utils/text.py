@@ -96,3 +96,21 @@ def replace_qs(source, *args):
                 param_map[arg[0]] = arg[1]
 
     return urlencode(param_map, doseq=True)
+
+
+def pluralize(singular, plural, count):
+    """Returns the plural if count is not 1::
+
+        pluraize('item', 'items', 1) -> 'item'
+        
+        pluraize('item', 'items', 2) -> 'items'
+
+        pluraize('item was', 'items were', 2) -> 'items were'
+
+    :param singular: singular form (returned when count in 1)
+    :param plural: pular form (returned when count is not 1)
+    :param count: a number which denotes how many items
+    """
+    if count == 1:
+        return singular
+    return plural
