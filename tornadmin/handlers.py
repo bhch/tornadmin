@@ -3,6 +3,7 @@ from tornado import web
 from multidict import MultiDict
 from tornadmin.utils.template import get_value, get_chained_attr
 from tornadmin.utils.text import replace_qs
+from tornadmin.flash import FlashMixin
 
 
 BASE_DIR = os.path.dirname(__file__)
@@ -19,7 +20,7 @@ class AdminUser:
         return False
 
 
-class BaseHandler(web.RequestHandler):
+class BaseHandler(web.RequestHandler, FlashMixin):
     admin_site = None
 
     async def prepare(self):

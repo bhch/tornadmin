@@ -503,6 +503,29 @@ label {
     padding-top: 0.8rem;
     padding-bottom: 0.8rem;
 }
+
+.alert-error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.alert-info .bi-alert-icon::before {
+    content: "\f431";
+}
+.alert-success .bi-alert-icon::before {
+    content: "\f270";
+}
+.alert-warning .bi-alert-icon::before {
+    content: "\f333";
+}
+.alert-danger .bi-alert-icon::before,
+.alert-error .bi-alert-icon::before {
+    content: "\f33b";
+}
+.alert-dismissible .close {
+    opacity: 0.8;
+}
+
 @media (max-width: 575px) {
     body {
         background-color: #f0f2f2;
