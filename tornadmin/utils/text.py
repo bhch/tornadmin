@@ -38,7 +38,13 @@ def slugify(value, allow_unicode=False):
     return re.sub(r'[-\s]+', '-', value).strip('-_')
 
 
-def get_display_name(value):
+def get_display_name(obj):
+    if isinstance(obj, str):
+        value = obj
+    elif callable(obj):
+        value = obj.__name__
+    else:
+        value = str(obj)
     return ' '.join(value.split('_')).capitalize()
 
 
