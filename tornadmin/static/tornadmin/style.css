@@ -422,6 +422,17 @@ label {
     border-radius: .25rem;
     padding-left: 2.5rem;
 }
+.empty-list-page {
+    margin-left: -15px;
+    margin-right: -15px;
+    margin-bottom: -15px;
+    padding: 75px 0;
+    color: #c8c6c4;
+    background-color: #faf9f8;
+    border-top: 1px solid #e1dfdd;
+    font-size: 1.8rem;
+    text-align: center;
+}
 
 .header {
     margin-bottom: 25px

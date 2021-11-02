@@ -67,6 +67,7 @@
             </div>
         </div>
     </div>
+    {% if page.paginator.count %}
     <div class="table-container">
         <table class="table table-hover table-checkable">
             <thead>
@@ -107,6 +108,9 @@
             </tbody>
         </table>
     </div>
+    {% else %}
+    <div class="empty-list-page">Nothing here</div>
+    {% end %}
 </div>
 
 {% for action in actions %}
