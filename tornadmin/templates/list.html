@@ -93,7 +93,7 @@
                         </div>
                     </td>
                     {% for index, header in enumerate(headers) %}
-                        {% set value = get_value(get_chained_attr(item, header[0])) %}
+                        {% set value = get_list_display(header[0], item, admin) %}
                         <td>
                             {% if index == 0 %}
                             <a href="{{ reverse_url('admin:detail', admin.app_slug, admin.slug, item.id) }}">{{ value }}</a>

@@ -42,6 +42,10 @@ class ModelAdmin(BaseModelAdmin):
         related_fields = [field for field in self.prefetch_fields]
         for header in self.get_list_headers():
             field = header[0]
+
+            if not isinstance(field, str):
+                continue
+
             if '__' in field:
                 field = field.split('__')[0]
             if field in [*self.model._meta.fk_fields, *self.model._meta.o2o_fields]:

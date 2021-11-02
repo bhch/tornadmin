@@ -1,7 +1,7 @@
 import os
 from tornado import web
 from multidict import MultiDict
-from tornadmin.utils.template import get_value, get_chained_attr
+from tornadmin.utils.template import get_value, get_chained_attr, get_list_display
 from tornadmin.utils.text import replace_qs, pluralize
 from tornadmin.flash import FlashMixin
 
@@ -65,6 +65,7 @@ class BaseHandler(web.RequestHandler, FlashMixin):
             'get_chained_attr': get_chained_attr,
             'replace_qs': replace_qs,
             'pluralize': pluralize,
+            'get_list_display': get_list_display,
         })
         return namespace
 
