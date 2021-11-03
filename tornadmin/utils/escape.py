@@ -1,4 +1,4 @@
-from tornado import escape
+from tornado.escape import xhtml_escape
 
 
 class SafeString(bytes):
@@ -24,7 +24,7 @@ class SafeString(bytes):
 def smart_xhtml_escape(value):
     if isinstance(value, SafeString):
         return value
-    return escape.xhtml_escape(value)
+    return xhtml_escape(value)
 
 
 def mark_safe(value):
