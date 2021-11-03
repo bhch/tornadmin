@@ -3,6 +3,7 @@ from tornado import web
 from multidict import MultiDict
 from tornadmin.utils.template import get_value, get_chained_attr, get_list_display
 from tornadmin.utils.text import replace_qs, pluralize
+from tornadmin.utils.escape import conditional_xhtml_escape, mark_safe
 from tornadmin.flash import FlashMixin
 
 
@@ -66,6 +67,8 @@ class BaseHandler(web.RequestHandler, FlashMixin):
             'replace_qs': replace_qs,
             'pluralize': pluralize,
             'get_list_display': get_list_display,
+            'conditional_xhtml_escape': conditional_xhtml_escape,
+            'mark_safe': mark_safe,
         })
         return namespace
 

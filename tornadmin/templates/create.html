@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% autoescape None %}
+{% autoescape conditional_xhtml_escape %}
 
 {% block content %}
 
@@ -30,33 +30,33 @@
                 {% for field in form %}
                 <div class="form-group">
                     {% if field.type == 'BooleanField' %}
-                        {%set input_class = 'custom-control custom-checkbox' %}
+                        {% set input_class = 'custom-control custom-checkbox' %}
                     {% elif field.type == 'RadioField' %}
-                        {%set input_class = 'custom-control custom-radio' %}
+                        {% set input_class = 'custom-control custom-radio' %}
                     {% elif field.type == 'SelectField'  %}
-                        {%set input_class = 'custom-select' %}
+                        {% set input_class = 'custom-select' %}
                     {% else %}
-                        {%set input_class = 'form-control' %}
+                        {% set input_class = 'form-control' %}
                     {% end %}
 
                     {% if field.type in ['BooleanField', 'RadioField'] %}
                         <div class="{{ input_class }}">
                             {% if field.errors %}
-                                {{ field(class_='custom-control-input is-invalid') }}
-                                {{ field.label(class_='custom-control-label') }}
+                                {{ mark_safe(field(class_='custom-control-input is-invalid')) }}
+                                {{ mark_safe(field.label(class_='custom-control-label')) }}
                                 <div class="invalid-feedback">{{ field.errors[0] }}</div>
                             {% else %}
-                                {{ field(class_='custom-control-input') }}
-                                {{ field.label(class_='custom-control-label') }}
+                                {{ mark_safe(field(class_='custom-control-input')) }}
+                                {{ mark_safe(field.label(class_='custom-control-label')) }}
                             {% end %}
                         </div>
                     {% else %}
-                        {{ field.label }}
+                        {{ mark_safe(field.label) }}
                         {% if field.errors %}
-                            {{ field(class_=input_class + ' is-invalid') }}
+                            {{ mark_safe(field(class_=input_class + ' is-invalid')) }}
                             <div class="invalid-feedback">{{ field.errors[0] }}</div>
                         {% else %}
-                            {{ field(class_=input_class) }}
+                            {{ mark_safe(field(class_=input_class)) }}
                         {% end %}
                     {% end %}
                 </div>
