@@ -21,7 +21,7 @@ class SafeString(bytes):
     pass
 
 
-def smart_xhtml_escape(value):
+def conditional_xhtml_escape(value):
     if isinstance(value, SafeString):
         return value
     return xhtml_escape(value)
