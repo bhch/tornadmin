@@ -1,4 +1,4 @@
-from tornado.escape import xhtml_escape
+from tornado.escape import xhtml_escape, to_unicode
 
 
 class SafeString(bytes):
@@ -23,7 +23,7 @@ class SafeString(bytes):
 
 def conditional_xhtml_escape(value):
     if isinstance(value, SafeString):
-        return value
+        return to_unicode(value)
     return xhtml_escape(value)
 
 
@@ -31,7 +31,14 @@ def mark_safe(value):
     if isinstance(value, str):
         value = SafeString(value.encode('utf8'))
     elif hasattr(value, '__html__'):
-        # __html__ method is implement in many third party libraries
+        # __html__ method is implemented in many libraries
         # to denote that it returns safe html data
         value = SafeString(value.__html__().encode('utf8'))
     return value
+
+
+def format_html(format_str, *args, **kwargs):
+    # taken from django
+    args_safe = map(conditional_xhtml_escape, args)
+    kwargs_safe = {k: conditional_xhtml_escape(v) for (k, v) in kwargs.items()}
+    return mark_safe(format_str.format(*args_safe, **kwargs_safe))
