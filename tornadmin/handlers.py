@@ -247,14 +247,11 @@ class CreateHandler(BaseHandler):
         data = MultiDict()
 
         for field_name in form_class._fields:
-            # :TODO: Implement a multivaluedict to store values in a list
-            # instead of using data dictionary
-            # because the current way doesn't allow multiple values.
             value = self.get_body_arguments(field_name, None)
             if value:
                 data.extend(list(zip([field_name] * len(value), value)))
             else:
-                data[field_name] = None
+                data[field_name] = ''
 
         form = form_class(formdata=data)
 
@@ -301,14 +298,11 @@ class DetailHandler(BaseHandler):
         data = MultiDict()
 
         for field_name in form_class._fields:
-            # :TODO: Implement a multivaluedict to store values in a list
-            # instead of using data dictionary
-            # because the current way doesn't allow multiple values.
             value = self.get_body_arguments(field_name, None)
             if value:
                 data.extend(list(zip([field_name] * len(value), value)))
             else:
-                data[field_name] = None
+                data[field_name] = ''
 
         form = form_class(formdata=data)
         await form.set_field_choices(self, obj=obj)
