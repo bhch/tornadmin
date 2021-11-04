@@ -25,6 +25,7 @@
     </div>
     {% end %}
     <form method="POST">
+        {% module xsrf_form_html() %}
         <div class="row">
             <div class="col-12 col-md-8 col-lg-6">
                 {% for field in form %}
@@ -92,6 +93,7 @@
             <div class="modal-footer">
                 {% if obj %}
                 <form action="{{ reverse_url('admin:delete', admin.app_slug, admin.slug, obj.id) }}" method="POST">
+                    {% module xsrf_form_html() %}
                     <button type="button" class="btn btn-secondary mr-1" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-outline-danger">Delete</button>
                 </form>

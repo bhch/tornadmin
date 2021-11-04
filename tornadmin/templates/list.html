@@ -43,6 +43,7 @@
                     </button>
                     <div class="dropdown-menu dropdown-menu-md-right">
                         <form id="actionForm" action="{{ reverse_url('admin:list', admin.app_slug, admin.slug) }}?{{ handler.request.query }}" method="POST">
+                            {% module xsrf_form_html() %}
                             {% for action in actions %}
                             {% if action.require_confirmation %}
                             <button

@@ -17,6 +17,7 @@
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
                     <form action="{{ reverse_url('admin:logout') }}" method="POST">
+                        {% module xsrf_form_html() %}
                         <input type="submit" class="dropdown-item" value="Logout">
                     </form>
                 </div>
