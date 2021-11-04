@@ -224,7 +224,10 @@ class ListHandler(BaseHandler):
         else:
             self.flash('error', 'This action is not available')
 
-        return self.redirect('admin:list', app_slug, model_slug)
+        next_url = self.reverse_url('admin:list', app_slug, model_slug)
+        if self.request.query:
+            next_url += '?%s' % self.request.query
+        return self.redirect(next_url)
 
 
 class CreateHandler(BaseHandler):
