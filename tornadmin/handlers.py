@@ -141,6 +141,7 @@ class LoginHandler(BaseHandler):
             message = 'Wrong username or password'
 
         if success:
+            self.clear_cookie("_xsrf") # OWASP recommends to reset XSRF token after login
             return self.redirect('admin:index')
 
         namespace = {
