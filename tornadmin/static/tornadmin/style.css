@@ -202,6 +202,7 @@ label {
 }
 .form-check-label,
 .custom-control-label{
+    display: inline-block;
     min-width: 130px;
     color: #201f1e;
     font-size: 1rem;
@@ -434,6 +435,17 @@ label {
 .input-group > .form-control:not(:first-child) {
     border-radius: .25rem;
     padding-left: 2.5rem;
+}
+.filters-container {
+    border-top: 1px solid #e1dfdd;
+}
+.filter-name {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 1rem;
+}
+.filters-container .custom-control {
+    margin-bottom: 0.25rem;
 }
 .empty-list-page {
     margin-left: -15px;
