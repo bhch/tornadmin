@@ -2,7 +2,7 @@ import os
 from tornado import web
 from multidict import MultiDict
 from tornadmin.utils.template import get_value, get_chained_attr, get_list_display
-from tornadmin.utils.text import replace_qs, pluralize
+from tornadmin.utils.text import replace_qs, pluralize, get_display_name
 from tornadmin.utils.escape import conditional_xhtml_escape, mark_safe
 from tornadmin.flash import FlashMixin
 
@@ -69,6 +69,7 @@ class BaseHandler(web.RequestHandler, FlashMixin):
             'get_list_display': get_list_display,
             'conditional_xhtml_escape': conditional_xhtml_escape,
             'mark_safe': mark_safe,
+            'get_display_name': get_display_name,
         })
         return namespace
 
@@ -190,12 +191,15 @@ class ListHandler(BaseHandler):
 
         list_items, page = await admin.get_list(self, page_num=page_num, q=q)
 
+        filters = await admin.get_filters(self)
+
         namespace = {
             'admin': admin,
             'headers': admin.get_list_headers(),
             'list_items': list_items,
             'page': page,
             'q': q,
+            'filters': filters,
         }
 
         self.render('list.html', **namespace)

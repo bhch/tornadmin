@@ -6,6 +6,7 @@ class BaseModelAdmin:
     prefetch_fields = []
     readonly_fields = []
     actions = []
+    filters = []
 
     def __init__(self, *args, **kwargs):
         raise NotImplementedError('Implement in subclass')
@@ -31,7 +32,7 @@ class BaseModelAdmin:
     def get_absolute_url(self, request_handler, obj):
         return None
 
-    async def get_action_queryset(self, request_handler, selected, selected_all):
+    async def get_action_queryset(self, request_handler, action_name, selected, selected_all):
         raise NotImplementedError('Implement in subclass')
 
     def get_actions(self, request_handler):
@@ -51,3 +52,9 @@ class BaseModelAdmin:
         for action in actions:
             if action.__name__ == name:
                 return action
+
+    async def get_filters(self, request_handler):
+        return self.filters
+
+    async def get_fitlered_results(self, request_handler, filters):
+        raise NotImplementedError('Implement in subclass')

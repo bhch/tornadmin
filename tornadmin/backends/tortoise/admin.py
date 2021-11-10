@@ -72,6 +72,13 @@ class ModelAdmin(BaseModelAdmin):
         else:
             return self.model.filter(id__in=selected)
 
+    async def get_fitlers(self, request_handler):
+        filters = await super().get_filters(request_handler)
+        return filters
+
+    async def get_filtered_results(self, queryset, filters):
+        raise NotImplementedError('Implement in subclass')
+
     async def get_object(self, request_handler, id):
         return await self.model.get(id=id)
 
