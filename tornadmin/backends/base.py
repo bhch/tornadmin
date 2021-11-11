@@ -7,6 +7,7 @@ class BaseModelAdmin:
     readonly_fields = []
     actions = []
     filters = []
+    order_by = []
 
     def __init__(self, *args, **kwargs):
         raise NotImplementedError('Implement in subclass')
@@ -14,7 +15,7 @@ class BaseModelAdmin:
     def get_list_headers(self):
         raise NotImplementedError('Implement in subclass')
 
-    async def get_list(self, request_handler, page_num, q):
+    async def get_list(self, request_handler, page_num, q, o):
         raise NotImplementedError('Implement in subclass')
 
     async def get_object(self, request_handler, id):
@@ -58,3 +59,6 @@ class BaseModelAdmin:
 
     async def get_fitlered_results(self, request_handler, filters):
         raise NotImplementedError('Implement in subclass')
+
+    def get_order_by(self, request_handler):
+        return self.order_by

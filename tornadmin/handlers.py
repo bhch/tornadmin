@@ -188,8 +188,9 @@ class ListHandler(BaseHandler):
 
         page_num = self.get_query_argument('page', 1)
         q = self.get_query_argument('q', '')
+        o = self.get_query_argument('o', '')
 
-        list_items, page = await admin.get_list(self, page_num=page_num, q=q)
+        list_items, page = await admin.get_list(self, page_num=page_num, q=q, o=o)
 
         filters = await admin.get_filters(self)
 
@@ -199,6 +200,7 @@ class ListHandler(BaseHandler):
             'list_items': list_items,
             'page': page,
             'q': q,
+            'o': o,
             'filters': filters,
         }
 

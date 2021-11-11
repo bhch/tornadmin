@@ -6,6 +6,11 @@ from tornadmin.utils.text import split_camel, slugify, get_display_name
 
 
 class ModelAdmin(BaseModelAdmin):
+    order_by = [
+        ('Newest first', '-id'),
+        ('Oldest first', 'id'),
+    ]
+
     def __init__(self, model, **kwargs):
         name = model.__name__
 
@@ -25,7 +30,7 @@ class ModelAdmin(BaseModelAdmin):
                 headers.append((header, get_display_name(header)))
         return headers
 
-    async def get_list(self, request_handler, page_num, q):
+    async def get_list(self, request_handler, page_num, q, o):
         queryset = self.model.all()
 
         if q:
@@ -51,10 +56,16 @@ class ModelAdmin(BaseModelAdmin):
             if field in [*self.model._meta.fk_fields, *self.model._meta.o2o_fields]:
                 related_fields.append(field)
 
+        if not o:
+            try:
+                o = self.get_order_by(request_handler)[0][1]
+            except IndexError: # order_by list is set to empty
+                o = '-id'
+
         if related_fields:
-            page_list = await page_queryset.order_by('-id').prefetch_related(*related_fields)
+            page_list = await page_queryset.order_by(o).prefetch_related(*related_fields)
         else:
-            page_list = await page_queryset.order_by('-id')
+            page_list = await page_queryset.order_by(o)
 
         return (page_list, page)
 

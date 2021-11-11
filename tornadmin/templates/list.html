@@ -96,21 +96,21 @@
                         </div>
                         {% end %}
 
+                        {% set order_by = admin.get_order_by(handler) %}
+                        {% if order_by %}
+                        {% set selected_o = o or order_by[0][1] %}
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                            <span class="filter-name">Sorting</span>
+                            <span class="filter-name">Sort by</span>
+                            {% for option in order_by %}
                             <div class="custom-control custom-radio">
                                 <label>
-                                    <input checked="" class="custom-control-input" name="o" type="radio" value="id">
-                                    <span class="custom-control-label">Newest first</span>
+                                    <input {% if option[1] == selected_o %}checked=""{% end %} class="custom-control-input" name="o" type="radio" value="{{ option[1] }}">
+                                    <span class="custom-control-label">{{ option[0] }}</span>
                                 </label>
                             </div>
-                            <div class="custom-control custom-radio">
-                                <label>
-                                    <input class="custom-control-input" name="o" type="radio" value="-id">
-                                    <span class="custom-control-label">Oldest first</span>
-                                </label>
-                            </div>
+                            {% end %}
                         </div>
+                        {% end %}
                     </div>
                 </div>
             </div>
