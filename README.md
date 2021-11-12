@@ -17,7 +17,7 @@
 
 ## Introduction
 
-Tornadmin is an admin site generation framework for Tornado web server. It is inspired a little by Django-Admin and a lot by Flask-Admin.
+Tornadmin is an admin site generation framework for Tornado web server. It is inspired by Django-Admin and Flask-Admin.
 
 ## Supported database ORMs
 
