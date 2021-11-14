@@ -190,9 +190,45 @@ class ListHandler(BaseHandler):
         q = self.get_query_argument('q', '')
         o = self.get_query_argument('o', '')
 
-        list_items, page = await admin.get_list(self, page_num=page_num, q=q, o=o)
-
         filters = await admin.get_filters(self)
+
+        filters_map = {}
+
+        for filter_ in filters:
+            indices = self.get_query_arguments(filter_['name'], [])
+
+            for index in indices:
+                if not indices:
+                    continue
+
+                try:
+                    index = int(index)
+                except ValueError:
+                    continue
+
+                value = filter_['options'][index][1]
+
+                if value == '':
+                    continue
+
+                if filter_['type'] == 'checkbox':
+                    if filter_['name'] not in filters_map:
+                        filters_map[filter_['name']] = []
+                    filters_map[filter_['name']].append(filter_['options'][index][1])
+                else:
+                    if filter_['name'] not in filters_map:
+                        filters_map[filter_['name']] = []
+                    filters_map[filter_['name']].append(filter_['options'][index][1])
+
+        list_items, page = await admin.get_list(self, page_num=page_num, q=q, o=o, filters=filters_map)
+
+        selected_filters = {}
+
+        for key, value in filters_map.items():
+            if not isinstance(value, list):
+                value = [value]
+
+            selected_filters[key] = value
 
         namespace = {
             'admin': admin,
@@ -202,6 +238,7 @@ class ListHandler(BaseHandler):
             'q': q,
             'o': o,
             'filters': filters,
+            'selected_filters': selected_filters,
         }
 
         self.render('list.html', **namespace)
