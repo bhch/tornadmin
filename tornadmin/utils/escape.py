@@ -4,7 +4,7 @@ from tornado.escape import xhtml_escape, to_unicode
 class SafeString(bytes):
     """Instances of this class will not be escaped in the templates.
 
-    This only works with ``smart_xhtml_escape`` function as Tornado's
+    This only works with ``conditional_xhtml_escape`` function as Tornado's
     built-in ``xhtml_escape`` function has not concept of safe objects.
 
     We're inheriting it from ``bytes`` because Tornado's template engine
