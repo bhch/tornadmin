@@ -431,8 +431,8 @@ label {
     color: #797775;
     pointer-events: none;
 }
-.list-search-form .input-group > .custom-select:not(:first-child),
-.input-group > .form-control:not(:first-child) {
+.list-search-form.input-group > .custom-select:not(:first-child),
+.list-search-form.input-group > .form-control:not(:first-child) {
     border-radius: .25rem;
     padding-left: 2.5rem;
 }

@@ -1,6 +1,6 @@
 from wtforms import Form, fields
 from wtforms.fields.html5 import DateField
-from tornadmin.backends.widgets import Select
+from tornadmin.backends.widgets import SelectWidget, DateTimeWidget
 
 
 class BaseModelForm(Form):
@@ -13,6 +13,8 @@ class NullDateTimeField(fields.DateTimeField):
     
     Renders separate date and time fields for better browser support.
     """
+    widget = DateTimeWidget()
+
     def process_data(self, value):
         super().process_data(value)
         if self.data == '':
@@ -32,4 +34,4 @@ class NullDateField(DateField):
 
 
 class SelectField(fields.SelectField):
-    widget = Select()
+    widget = SelectWidget()

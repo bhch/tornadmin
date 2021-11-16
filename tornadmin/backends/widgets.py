@@ -3,7 +3,7 @@ from wtforms.widgets import html_params
 from markupsafe import escape, Markup
 
 
-class Select(widgets.Select):
+class SelectWidget(widgets.Select):
     """Overrides WTForm's Select widget to insert placeholder options"""
 
     def __call__(self, field, **kwargs):
@@ -21,3 +21,7 @@ class Select(widgets.Select):
             html.append(self.render_option(val, label, selected))
         html.append('</select>')
         return Markup(''.join(html))
+
+
+class DateTimeWidget(widgets.html5.DateTimeInput):
+    pass
