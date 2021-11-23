@@ -19,3 +19,4 @@ Table of contents
 
    installation
    quickstart
+   guide/index.rst

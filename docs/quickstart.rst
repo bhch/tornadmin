@@ -1,7 +1,7 @@
 Quickstart
 ==========
 
-Tornadmin is inspired by Django admin but with more flexiblity in mind.
+Tornadmin is inspired by Django admin but with more flexibility in mind.
 
 Creating the admin site
 -----------------------
@@ -62,3 +62,10 @@ It should look something like this:
 
 .. image:: _static/screenshots/1.png
     :alt: Screenshot of admin site
+
+
+Next steps
+----------
+
+- See the :doc:`User's guide <guide/index>` for details on certain useful topics
+  such as :doc:`adding authentication <guide/authentication>` to the admin site.
