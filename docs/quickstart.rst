@@ -67,5 +67,4 @@ It should look something like this:
 Next steps
 ----------
 
-- See the :doc:`User's guide <guide/index>` for details on certain useful topics
-  such as :doc:`adding authentication <guide/authentication>` to the admin site.
+- :doc:`Adding authentication<authentication>`
