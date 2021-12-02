@@ -20,3 +20,4 @@ Table of contents
    installation
    quickstart
    authentication
+   modeladmin
