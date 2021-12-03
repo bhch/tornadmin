@@ -22,10 +22,37 @@ To register your models in the admin site, you need to create a subclass of the
 Basic usage
 -----------
 
+Let's assume we've a Tortoise-ORM model called ``User`` which looks like this:
+
+.. code-block:: python
+
+    # models
+
+    from tortoise.models import Model
+    from tortoise import fields
+
+
+    class User(Model):.
+        id = fields.IntField(pk=True)
+        username = fields.CharField(max_length=150, index=True, unique=True)
+        email = fields.CharField(max_length=128, index=True, unique=True)
+
+        first_name = fields.CharField(max_length=32, default='')
+        last_name = fields.CharField(max_length=32, default='')
+
+        is_verified = fields.BooleanField(default=False)
+
+        def get_full_name(self):
+            return '%s %s' % (self.first_name, self.last_name)
+
+And this is how we'll register this model in the admin site:
+
 .. code-block:: python
 
     from tornadmin import BaseAdminSite
     from tornadmin.backends.tortoise import ModelAdmin
+
+    from my_models import User
 
 
     class AdminSite(BaseAdminSite):
