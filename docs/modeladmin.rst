@@ -69,3 +69,23 @@ And this is how we'll register this model in the admin site:
     # to admin site's register method
     admin_site.register(UserAdmin(model=User, app='Auth'))
 
+
+What's an App?
+--------------
+
+The concept of Apps (applications) is inspired by Django. This provides a way
+for you to organize similar models under a single app.
+
+Example:
+
+- App: **Blog**
+
+    - ``Articles``
+    - ``Authors``
+    - ``Comments``
+
+- App: **Shop**
+
+    - ``Products``
+    - ``Categories``
+    - ``Orders``
