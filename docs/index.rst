@@ -20,4 +20,5 @@ Table of contents
    installation
    quickstart
    authentication
+   registering-models
    modeladmin
