@@ -25,6 +25,16 @@ These models are pseudo-code.
         price = IntField
 
 
+``ModelAdmin.exclude``
+----------------------
+
+A list of fields to exclude from the admin form page.
+
+.. code-block:: python
+
+    class BookAdmin(ModelAdmin):
+        exclude = ['price']
+
 ``ModelAdmin.prefetch_fields``
 ------------------------------
 
