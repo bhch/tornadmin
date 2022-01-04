@@ -64,7 +64,7 @@ The values in the list can be one of the following:
 - Name of a method on the admin class
 - A callable object
 
-Here are examples:
+**Example 1**: Name of a database field in the model:
 
 .. code-block:: python
 
@@ -78,3 +78,43 @@ You can change the display name of the columns:
 
     class BookAdmin(ModelAdmin):
         list_headers = [('title', 'Book title'), 'price']
+
+
+**Example 2**: Name of a method on the model class:
+
+.. code-block:: python
+
+    class Author(Model):
+        name = CharField
+        age = IntegerField
+
+        def is_older_than_50(self):
+            return self.age > 50
+
+
+    class AuthorAdmin(ModelAdmin):
+        list_display = ['name', 'is_older_than_50']
+
+
+**Example 3**: Name of a method on the admin class:
+
+.. code-block:: python
+
+    class AuthorAdmin(ModelAdmin):
+        list_headers = ['uppercase_name']
+
+        def is_older_than_50(self, obj):
+            """The 'obj' parameter will be an instance of the model class"""
+            return obj.age > 50
+
+
+**Example 4**: A callable object:
+
+.. code-block:: python
+
+    def is_older_than_50(obj):
+        return obj.age > 50
+
+
+    class AuthorAdmin(ModelAdmin):
+        list_headers = [is_older_than_50] # Pass the function object directly
