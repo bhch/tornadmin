@@ -118,3 +118,26 @@ You can change the display name of the columns:
 
     class AuthorAdmin(ModelAdmin):
         list_headers = [is_older_than_50] # Pass the function object directly
+
+
+``ModelAdmin.order_by``
+-----------------------
+
+A list of tuples providing the options for ordering (sorting) the items on list page.
+
+Each tuple looks like this: ``('Display name of option', 'value of the option')``
+
+.. code-block:: python
+
+    class BookAdmin(ModelAdmin):
+        order_by = [
+            # (<display name>, <value>)
+            ('Title (A-Z)', 'title'),
+            ('Title (Z-A)', '-title'),
+            ('Price (ascending)', 'price'),
+            ('Price (descending)', '-price'),
+        ]
+
+The ``value`` of the option is passed directly to Tortoise ORM's ``.order_by()``
+method. When a user selects an option, the query will look like this:
+``Book.all().order_by('-price')``.
