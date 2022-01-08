@@ -217,8 +217,7 @@ class ListHandler(BaseHandler):
                     filters_map[filter_['name']].append(filter_['options'][index][1])
                 else:
                     if filter_['name'] not in filters_map:
-                        filters_map[filter_['name']] = []
-                    filters_map[filter_['name']].append(filter_['options'][index][1])
+                        filters_map[filter_['name']] = filter_['options'][index][1]
 
         list_items, page = await admin.get_list(self, page_num=page_num, q=q, o=o, filters=filters_map)
 
