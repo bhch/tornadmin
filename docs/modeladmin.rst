@@ -23,6 +23,7 @@ These models are pseudo-code.
         title = CharField
         authors = ManyToManyField(to=Author)
         price = IntField
+        discount = IntField
 
 
 ``ModelAdmin.exclude``
@@ -138,6 +139,58 @@ Each tuple looks like this: ``('Display name of option', 'value of the option')`
             ('Price (descending)', '-price'),
         ]
 
-The ``value`` of the option is passed directly to Tortoise ORM's ``.order_by()``
-method. When a user selects an option, the query will look like this:
-``Book.all().order_by('-price')``.
+The ``value`` of the option is passed directly to the datbase ORM's ordering function
+(such as Tortoise ORM's ``.order_by()`` method. So, when a user selects an option,
+the query will look like this: ``Book.all().order_by('-price')``).
+
+``ModelAdmin.filters``
+----------------------
+
+A list of dicts providing the options for filtering the items on the list page.
+
+Each filter is a python dictionary with the following keys:
+
+============ ===========
+Key          Description
+============ ===========
+``name``     Name of the filter (``str``)
+``label``    Optional display name of the filter (``str``).
+
+             If not provided, the value of ``name`` key is used.
+``type``     Type of the filter. Supports two types: ``'radio'`` and ``'checkbox'``.
+``options``  A list of tuples in this format: ``('<display name>', '<value>')``.
+============ ===========
+
+A ``checkbox`` filter can have more than one values selected by the user. So, on 
+the server, it's values will be inside a list. Whereas a ``radio`` filter can have 
+only one value and, so, on the server side it will a standalone value (not inside a list).
+
+You're responsible for writing the filtering logic yourself using a method called
+``get_filtered_results()``:
+
+.. code-block:: python
+
+    class BookAdmin(ModelAdmin):
+        filters = [
+            {
+                'name': 'on_sale',
+                'type': 'radio',
+                'options': [
+                    ('Any', ''),
+                    ('Yes', True),
+                    ('No', False)
+                ]
+            }
+        ]
+
+        def get_filtered_results(self, queryset, filters):
+            on_sale = fitlers.get('on_sale')
+
+            if on_sale == True:
+                # only show books with discount
+                return queryset.filter(discount__gte=0)
+            elif on_sale == False:
+                # only show books without discount
+                return queryset.filter(discount=0)
+
+            return queryset
