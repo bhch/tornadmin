@@ -194,3 +194,67 @@ You're responsible for writing the filtering logic yourself using a method calle
                 return queryset.filter(discount=0)
 
             return queryset
+
+
+``ModelAdmin.actions``
+----------------------
+
+List specifying the actions for the list page.
+
+By default we provide a **"Delete selected"** action.
+
+Defining a basic action:
+
+.. code-block:: python
+
+    from tornadmin.decorators import action
+    from tornadmin.utils.text import pluralize
+
+
+    class BookAdmin(ModelAdmin):
+        action = ['remove_discount']
+
+        @action(label='Remove discount')
+        async def remove_discount(self, request_handler, queryset):
+            count = await queryset.count()
+
+            if count: # queryset is not empty
+                await queryset.update(discount=0) # set discount to zero
+
+                # show a success message to the user
+                request_handler.flash(
+                    'success', 
+                    'Successfully removed discount from %s %s' 
+                    % (count, pluralize('book', 'books', count))
+                )
+
+The ``@action`` decorator takes these keyword arguments:
+
+``label`` (``str``)
+     Optional display name of the action.
+
+``new_tab`` (``bool``)
+    If ``True``, the action will run on a new browser tab. Default ``False``.
+
+``require_selection`` (``bool``)
+    If ``True``, the action will only run when a user selects items on the list page.
+    Set this to ``False`` if you want to run a an action without requiring selection.
+    Default ``True``.
+
+``require_confirmation`` (``bool``)
+    If ``True``, a confirmation modal will be shown to user before running the action.
+    Default ``False``.
+
+``modal_title`` (``str``)
+    Optional title for the confirmation modal. Defaults to the value of ``label``.
+
+``modal_body`` (``str``)
+    Optional body text for the confirmation modal. Defaults to the value of ``modal_title`` or ``label``.
+
+``modal_button_label`` (``str``)
+    Optional label for the confirmation button. Defaults to the value of ``label``.
+
+``modal_button_class`` (``str``)
+    Optional CSS class for the confirmation button. You can set this value to any
+    button class provided by Bootstrap without the ``btn-`` prefix.
+    Default ``primary``.
