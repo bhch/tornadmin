@@ -9,6 +9,7 @@ Creating the admin site
 Here's a quick and dirty way to setup the admin site:
 
 .. code-block:: python
+    :emphasize-lines: 26,29
 
     # app.py
 
@@ -38,7 +39,7 @@ Here's a quick and dirty way to setup the admin site:
                 AdminRouter(admin_site), # add admin site's route to your app
             ],
             debug=True,
-            uimodules=[tornadmin_uimodules], # add admin site's uimodules
+            ui_modules=[tornadmin_uimodules], # add admin site's uimodules
         )
 
 
