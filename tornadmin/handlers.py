@@ -21,7 +21,7 @@ class AdminUser:
         return False
 
 
-class BaseHandler(web.RequestHandler, FlashMixin):
+class BaseHandler(FlashMixin, web.RequestHandler):
     admin_site = None
 
     async def prepare(self):
