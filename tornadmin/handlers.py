@@ -5,6 +5,7 @@ from tornadmin.utils.template import get_value, get_chained_attr, get_list_displ
 from tornadmin.utils.text import replace_qs, pluralize, get_display_name
 from tornadmin.utils.escape import conditional_xhtml_escape, mark_safe
 from tornadmin.flash import FlashMixin
+from tornado_debugger import DebuggerMixin
 
 
 BASE_DIR = os.path.dirname(__file__)
@@ -21,7 +22,7 @@ class AdminUser:
         return False
 
 
-class BaseHandler(FlashMixin, web.RequestHandler):
+class BaseHandler(DebuggerMixin, FlashMixin, web.RequestHandler):
     admin_site = None
 
     async def prepare(self):
