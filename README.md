@@ -36,6 +36,13 @@ $ pip install tornadmin
 
 Quickstart and usage docs can be found at [https://tornadmin.rtfd.io](http://tornadmin.rtfd.io).
 
+##  ⚠️ Caution
+
+This project is a work in progress. If you're going to use it, please keep in mind that each new
+release may introduce breaking changes.
+
+Version 1.0 will be the stable, production-ready release, but it has no definite ETA yet.
+
 ## License
 
 [BSD-3-Clause](LICENSE.txt)
