@@ -63,7 +63,7 @@ def get_list_display(attr, model_instance, admin_instance):
             found = True
 
     if not found:
-        if hasattr(admin_instance, attr):
+        if hasattr(admin_instance, attr) and callable(getattr(admin_instance, attr)):
             value = get_value(getattr(admin_instance, attr)(model_instance))
         elif hasattr(model_instance, attr):
             value = get_value(getattr(model_instance, attr))
