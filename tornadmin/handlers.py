@@ -103,7 +103,7 @@ class BaseHandler(DebuggerMixin, FlashMixin, web.RequestHandler):
             return base + get_url(fake_settings, path, **kwargs)
 
         else:
-            return super().static_url(path, include_host, *args, **kwargs)
+            return super().static_url(path, include_host, **kwargs)
 
     def _static_url(self, path, *args, **kwargs):
         url = super().static_url(path, *args, **kwargs)
