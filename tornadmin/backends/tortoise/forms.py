@@ -109,7 +109,12 @@ def modelform_factory(admin, model):
         validators_list = []
 
         if model_field.required and field_name not in admin.readonly_fields:
-            validators_list.append(validators.required())
+            if type(model_field).__name__ in ['IntField', 'SmallIntField', 'FloatField']:
+                # for integer inputs, WTForms treats 0 as falsy
+                # so we need a different required validator
+                validators_list.append(validators.InputRequired())
+            else:
+                validators_list.append(validators.required())
         else:
             validators_list.append(validators.optional())
 
