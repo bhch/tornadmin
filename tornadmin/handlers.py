@@ -294,6 +294,8 @@ class CreateHandler(BaseHandler):
         data = MultiDict()
 
         for field_name in form_class._fields:
+            if not admin.field_is_editable(field_name):
+                continue
             value = self.get_body_arguments(field_name, None)
             if value:
                 data.extend(list(zip([field_name] * len(value), value)))
@@ -345,6 +347,8 @@ class DetailHandler(BaseHandler):
         data = MultiDict()
 
         for field_name in form_class._fields:
+            if not admin.field_is_editable(field_name):
+                continue
             value = self.get_body_arguments(field_name, None)
             if value:
                 data.extend(list(zip([field_name] * len(value), value)))

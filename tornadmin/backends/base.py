@@ -30,6 +30,23 @@ class BaseModelAdmin:
     async def save_model(self, request_handler, form, obj=None):
         raise NotImplementedError('Implement in subclass')
 
+    def field_is_editable(self, field):
+        """Returns True if this field is editable. Else, returns False.
+
+        This method is a shorthand for checking the ``fields``,
+        ``exclude`` and ``readonly_fields`` lists.
+        """
+        if field in self.exclude:
+            return False
+
+        if field in self.readonly_fields:
+            return False
+
+        if self.fields and field not in self.fields:
+            return False
+
+        return True
+
     def get_absolute_url(self, request_handler, obj):
         return None
 
